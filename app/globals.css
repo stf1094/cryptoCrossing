@@ -147,7 +147,6 @@ img {
 }
 .landing-background {
   background-color: #131a35;
-  background-image: url('../assets/bg-grad.png');
   background-size: 100% 95%;
   opacity: .1;
   background-repeat: no-repeat;
