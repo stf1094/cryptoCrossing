@@ -9,7 +9,7 @@ import UpdateCoinModal from '../../components/UpdateCoinModal';
 import { ArrowPathRoundedSquareIcon, PlusCircleIcon } from '@heroicons/react/24/outline';
 import { setUser } from '@/store/actions/authAction';
 
-const Dashboard = () => {
+const Portfolio = () => {
     const [coinOptions, setCoinOptions] = useState([]);
     const [list, setList] = useState([]);
     const [showUpdateModal, setShowUpdateModal] = useState(false);
@@ -49,8 +49,9 @@ const Dashboard = () => {
     useEffect(() => {
         if (user) {
           dispatch(fetchPortfolio());
+          dispatch(updatePrices(coinOptions));
         }
-        console.log('hey from inside fetchPOrtfolio inside Dash');
+        console.log('hey from inside fetchPOrtfolio/update prices inside Dash');
     }, []); 
 
     const onUpdatePrices = () => {
@@ -94,7 +95,7 @@ return (
   </header>
   <main>
     <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8"> 
-    <UpdateCoinModal showUpdateModal={showUpdateModal} setShowUpdateModal={setShowUpdateModal} modalCoinId={modalCoinId} modalCoin={modalCoin} modalAmount={modalAmount} />
+    <UpdateCoinModal showUpdateModal={showUpdateModal} setShowUpdateModal={setShowUpdateModal} coinOptions={coinOptions} modalCoinId={modalCoinId} modalCoin={modalCoin} modalAmount={modalAmount} />
     <AddCoinModal showAddCoinModal={showAddCoinModal} setShowAddCoinModal={setShowAddCoinModal} coinsList={coinOptions} seeValue={handleSeeValue} />
     <div className="dashboard">
         <div className="dashboard-header">
@@ -128,4 +129,4 @@ return (
 // )
 )}
 
-export default Dashboard;
+export default Portfolio;

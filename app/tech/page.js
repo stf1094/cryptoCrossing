@@ -1,6 +1,6 @@
 "use client";
 import Image from 'next/image';
-// import Link from 'next/link';
+import Link from 'next/link';
 //import logoIcon from '../assets/cc-logo-main.png';
 import logo from '../../assets/cc-logo-icon.png';
 import { useState } from 'react';
@@ -45,9 +45,10 @@ export default function Tech() {
             ))}
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <a href={"/login"} className="text-sm font-semibold leading-6 text-gray-900">
-            Log in <span aria-hidden="true">&rarr;</span>
-            </a>
+          <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+             <Link href='/login' className='bg-sky-400 text-white py-3 px-4 rounded-lg hover:bg-sky-300 mr-2'>Login</Link>
+             <Link href='/register' className='bg-blue-500 text-white py-3 px-4 rounded-lg hover:bg-blue-400 mr-2'>Sign Up</Link>
+          </div>
         </div>
         </nav>
         <Dialog as="div" className="lg:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>

@@ -42,7 +42,6 @@ export default function Home() {
        // console.log(data);
        // setCoins(data);
         setHomeCoins(data);
-        console.log(data);
     })
   }, []);
 
@@ -53,7 +52,7 @@ export default function Home() {
        <nav className="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
           <div className="flex lg:flex-1">
             <a href="#" className="-m-1.5 p-1.5">
-              <span className="sr-only">Your Company</span>
+              <span className="sr-only">Crypto Crossing</span>
               <Image src={logo} alt="logo" className="h-8 w-auto"></Image>
             </a>
           </div>
@@ -75,11 +74,8 @@ export default function Home() {
             ))}
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <a href={"/login"} className="text-sm font-semibold leading-6 text-gray-900">
-             {/*  Log in <span aria-hidden="true">&rarr;</span> */}
              <Link href='/login' className='bg-sky-400 text-white py-3 px-4 rounded-lg hover:bg-sky-300 mr-2'>Login</Link>
              <Link href='/register' className='bg-blue-500 text-white py-3 px-4 rounded-lg hover:bg-blue-400 mr-2'>Sign Up</Link>
-            </a>
           </div>
         </nav>
         <Dialog as="div" className="lg:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>

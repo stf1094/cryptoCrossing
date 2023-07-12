@@ -31,7 +31,7 @@ const onSubmit = e => {
 
 useEffect(() => {
   if(isAuthenticated) {
-    router.push('/dashboard');
+    router.push('/portfolio');
   }
 }, [user]);
      // redirect if logged in
