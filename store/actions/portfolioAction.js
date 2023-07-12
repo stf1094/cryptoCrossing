@@ -1,5 +1,6 @@
 import { db, auth } from "@/firebaseConfig";
 import { collection, getDocs, updateDoc, addDoc, doc, deleteDoc } from 'firebase/firestore';
+import { toast } from 'react-toastify';
 
 export const addACoin = (coin, portfolio) => dispatch => {
     let currentCoinsArray = [];
@@ -11,9 +12,11 @@ export const addACoin = (coin, portfolio) => dispatch => {
     .then(() => {
         dispatch({type: "addCoinSuccess"});
         dispatch(fetchPortfolio());
+        toast.success(`${coin.amount} ${coin.name} add to your portfolio!`);
     }).catch(error => {
         console.log(error.message);
         dispatch({type: "addCoinFail"});
+        toast.error(`There was an error adding ${coin.amount} ${coin.name} to your portfolio. Please try again...`);
     }).then(() => {
         console.log('hey from inside false');
     }) 
@@ -150,16 +153,18 @@ export const addACoin = (coin, portfolio) => dispatch => {
 };
 
 //delete a coin
-export const deleteACoin = (id) => dispatch => {
+export const deleteACoin = (id, amount, name) => dispatch => {
     const coinDoc = doc(db, "profiles", auth.currentUser.uid, 'coins', id);
     // db.collection('profiles').doc(auth.currentUser.uid).collection('coins').doc(id).delete()
     deleteDoc(coinDoc)
     .then(() => {
         dispatch({type: "deleteCoinSuccess", payload: id});
         dispatch(fetchPortfolio());
+        toast.success(`${amount} ${name} deleted successfully.`);
     }).catch(error => {
         console.log(error.message);
-        dispatch({type: "deleteCoinFail"})
+        dispatch({type: "deleteCoinFail"});
+        toast.error(`Error deleting ${name}...`);
     });
 }
 
@@ -177,14 +182,14 @@ export const fetchPortfolio = () => dispatch => {
                // console.log(doc.data());
                // console.log(doc.data().currentPrice);
                 total = total + doc.data().amount * doc.data().currentPrice;
-                //console.log(total);
+                console.log(total);
             });
            // dispatch(updateTotal(port, callback));
            dispatch(updateTotal2(total));
            //dispatch(fetchTotal())
         }).catch(error => {
             console.log(error.message);
-            dispatch({type: PORTFOLIO_FAIL, payload: error.message})
+            dispatch({type: "fetchPortfolioFail", payload: error.message})
         })
     }
 
@@ -215,7 +220,6 @@ export const updateTotal2 = (newTotal) => async dispatch => {
  export const updatePrices = (options) => dispatch => {
  // console.log(options);
   const coinsColl = collection(db, 'profiles', auth.currentUser.uid, 'coins');
- // const res = db.collection('profiles').doc(auth.currentUser.uid).collection('coins').get()
   getDocs(coinsColl)
     .then((snapshot) => {
       snapshot.docs.forEach(function(coindoc) {
@@ -241,24 +245,26 @@ export const updateTotal2 = (newTotal) => async dispatch => {
   })
 } 
 
-export const fetchTotal = () => dispatch => {
+/* export const fetchTotal = () => dispatch => {
    db.collection('profiles').doc(auth.currentUser.uid).get()
    .then(doc => {
        dispatch({type: FETCH_TOTAL, payload: doc.data().total})
        console.log(doc.data().total);
    })
    //console.log(res);
-}
+} */
 
-export const updatePortfolioItem = (newAmount, id) => async dispatch => {
+export const updatePortfolioItem = (newAmount, id, name, currentPrice) => async dispatch => {
     try {
        const coinDoc = doc(db, "profiles", auth.currentUser.uid, 'coins', id);
-       await updateDoc(coinDoc, {amount: newAmount});
+       await updateDoc(coinDoc, {amount: newAmount, value: newAmount * currentPrice, currentPrice: currentPrice});
        dispatch({type: "updateCoinSuccess"});
        dispatch(fetchPortfolio());
+       toast.success(`Updated ${name} successfully to ${newAmount}.`);
     } catch(err) {
         console.log(err.message);
         dispatch({type: "updateCoinFail"});
+        toast.error(`Could not update ${name}. Please try again.`);
     }
 }
 

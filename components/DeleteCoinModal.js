@@ -11,7 +11,7 @@ const DeleteCoinModal = ({coinToDeleteId, coinToDeleteName, coinToDeleteAmount, 
     };
       
     const handleClick = () => {
-        dispatch(deleteACoin(coinToDeleteId));
+        dispatch(deleteACoin(coinToDeleteId, coinToDeleteAmount, coinToDeleteName));
         //close modal
         setShowDeleteCoinModal(false);
     }

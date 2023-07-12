@@ -34,7 +34,7 @@ export default function Navbar2() {
       ]
   } else {
     navigation = [
-        { name: 'Dashboard', href: '/dashboard', current: false },
+        { name: 'Portfolio', href: '/portfolio', current: false },
         { name: 'News', href: '/news', current: false },
         { name: 'Market', href: '/market', current: false },
       ]

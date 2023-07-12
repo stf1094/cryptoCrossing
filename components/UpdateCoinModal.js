@@ -3,7 +3,7 @@ import { Fragment, useState, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { updatePortfolioItem } from '../store/actions/portfolioAction';
 
-const UpdateCoinModal = ({showUpdateModal, setShowUpdateModal, modalCoin, modalAmount, modalCoinId}) => {
+const UpdateCoinModal = ({showUpdateModal, setShowUpdateModal, modalCoin, modalAmount, modalCoinId, coinOptions}) => {
     const modalRef = useRef();;
     const [inputValue, setInputValue] = useState('');
     const dispatch = useDispatch();
@@ -15,9 +15,15 @@ const UpdateCoinModal = ({showUpdateModal, setShowUpdateModal, modalCoin, modalA
       };
     const handleChange = (event) => setInputValue(event.target.value);
       
-    const handleClick = () => {
+    const handleClick = async () => {
+        let currentPrice;
+        await coinOptions.forEach((coin) => {
+            if (coin.name === modalCoin ) {
+                currentPrice = coin.current_price;
+            }
+        });
         //send the new value with the id to firebase
-        dispatch(updatePortfolioItem(inputValue, modalCoinId));
+        dispatch(updatePortfolioItem(inputValue, modalCoinId, modalCoin , currentPrice));
         //close modal
         setInputValue('');
         setShowUpdateModal(false);
