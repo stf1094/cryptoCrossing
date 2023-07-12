@@ -8,11 +8,13 @@ import {
     deleteUser, reauthenticateWithCredential
   } from 'firebase/auth';
 import { collection, doc, getDocs, addDoc, setDoc, Timestamp, updateDoc } from 'firebase/firestore';
+import { toast } from 'react-toastify';
 
 // Register User from tutorial
  export const register = (email, password) => async dispatch => {
     console.log("inside register first part");
-    if (password.length < 6) {
+    if (password.length < 7) {
+        toast.warning("Passwords must be at least 7 characters.")
         //dispatch(setSignupAlert('Password must be 6 or more characters', 'warning'));
        console.log("Password must be 6 or more characters");
     } else {
@@ -20,14 +22,15 @@ import { collection, doc, getDocs, addDoc, setDoc, Timestamp, updateDoc } from '
             dispatch({type: "registerRequest"});
             const res = await createUserWithEmailAndPassword(auth, email, password);
             const { user } = res;
-   /*          const userProfile = {
+            const userProfile = {
                 uid: user.uid, 
-                email: email
+                email: email,
+                total: 0
                }
             const createProfile = (userProfile) => {
-                setDoc(doc(db, "users", user.uid), userProfile);
+                setDoc(doc(db, "profiles", user.uid), userProfile);
             }
-            createProfile(userProfile); */
+            createProfile(userProfile);
             dispatch({type: "registerSuccess", payload: user});
             dispatch(setUser());
            //  confirmEmail();
@@ -35,9 +38,14 @@ import { collection, doc, getDocs, addDoc, setDoc, Timestamp, updateDoc } from '
         } catch(error) {
             const errors = error.message;
             if (errors) {
-               // dispatch(setSignupAlert(errors, 'warning'));
-                console.log(errors + "inside if statement");
+                console.log(errors);
                 dispatch({type: "registerFail", payload: errors});
+                if (errors === "Firebase: Error (auth/email-already-in-use).") {
+                    toast.error("Error in signing up. This email is already in use.");
+                } else {
+                    toast.error("Error in signing up. Please try again...");
+                }
+                
             }
         } 
     }
@@ -74,31 +82,6 @@ export const setUser = () => dispatch => {
     }
 }
 
-/* firebase.auth().onAuthStateChanged((authUser) => {
-    if(authUser) {
-      store.dispatch(setUser(authUser))
-    } else {
-      store.dispatch(setUser(null))
-    }
-  }) */
-
-//Load user (from devConnect)
-/*   export const loadUser = () => dispatch => {
-    try {
-        const user = auth.currentUser;
-        dispatch({
-            type: USER_LOADED,
-            payload: user
-        });
-    } catch (err) {
-        dispatch({
-            type: AUTH_ERROR
-        });
-    }
-}  */ 
-
-// export const onAuthStateChanged = onAuthCallback => FirebaseAuthService.onAuthStateChanged(onAuthCallback);
-
 export const login = (email, password) => async dispatch => {
     try {
         dispatch({type: "loginRequest"});
@@ -108,16 +91,23 @@ export const login = (email, password) => async dispatch => {
             dispatch(setUser());
         }).catch(err => {
             const errors = err.message;
-            if (errors) {
-             // dispatch(setLoginAlert(errors, 'warning'));
-              console.log(errors);
+            console.log(errors);
+            if (errors === 'Firebase: Error (auth/user-not-found).') {
+                toast.error("No account associated with this email.");
+                dispatch({type: "loginFail", payload: errors});
+            } 
+            else if (errors === "Firebase: Error (auth/wrong-password).") {
+                toast.error("You've entered the wrong password.");
+                dispatch({type: "loginFail", payload: errors});
+            } else {
+               dispatch({type: "loginFail", payload: errors});
+               toast.error("Could not login. Please try again...");
             }
-           dispatch({type: "loginFail", payload: errors});
            }); 
         } catch(err) {
-            // dispatch(setLoginAlert(errors, 'warning'));
             console.log(err.message);
             dispatch({type: "loginFail", payload: err.message});
+            toast(err.message);
         }
 }
 
@@ -136,8 +126,8 @@ export const logout = () => async dispatch => {
         dispatch({type: "logoutRequest"});
         await signOut(auth);
         dispatch({type: "logoutSuccess"});
-        dispatch({type: "clearProfile"});
         dispatch({type: "clearPortfolio"});
+        dispatch({type: "clearProfile"});
     } catch(err) {
         console.log(err.message);
         dispatch({type: "logoutFail", payload: err.message});
@@ -185,10 +175,15 @@ export const logout = () => async dispatch => {
 
 //Password reset email -- if user can't login
 export const passwordResetEmail = (email) => {
+    console.log(email);
     sendPasswordResetEmail(auth, email)
     .then(() => {
         console.log('email sent');
+        dispatch({type: "forgotPasswordEmailSuccess"});
+        toast.success(`Email successfully sent to: ${email}`);
     }).catch((error) => {
         console.log(error.message);
+        dispatch({type: "forgotPasswordEmailFail", payload: error.message});
+        toast.error('There was an error sending email.', error.message);
     })
 };

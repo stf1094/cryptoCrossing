@@ -89,7 +89,6 @@ useEffect(() => {
                 value={password}
                 onChange={e => onChange(e)}
                 name="password"
-                minLength="7"
             />
             </div>
             <input type="submit" className="mt-3 bg-sky-400 py-3 px-8 text-white hover:bg-sky-300 hover:cursor-pointer rounded-xl" value="Register" />

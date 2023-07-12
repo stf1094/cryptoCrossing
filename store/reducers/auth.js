@@ -3,7 +3,8 @@ const initialState = {
    // token: localStorage.getItem('token'),
     isAuthenticated: null,
     loading: false,
-    user: null
+    user: null,
+    error: null,
 }
 
 export const authReducer = createReducer(initialState, (builder) => {
@@ -20,6 +21,9 @@ export const authReducer = createReducer(initialState, (builder) => {
         state.loading = true;
     });
     builder.addCase("setLoadingFalse", (state) => {
+        state.loading = false;
+    });
+    builder.addCase("forgotPasswordEmailSuccess", (state) => {
         state.loading = false;
     });
     builder.addCase("loginSuccess", (state) => {
@@ -66,44 +70,9 @@ export const authReducer = createReducer(initialState, (builder) => {
         state.isAuthenticated = true;
         state.error = action.payload;
     }); 
+    builder.addCase("forgotPasswordEmailFail", (state, action) => {
+        state.loading = false;
+        state.isAuthenticated = false;
+        state.error = action.payload;
+    });
 });
-
-/* export default function(state = initialState, action) {
-    const { type, payload } = action;
-
-    switch(type) {
-        case USER_LOADED:
-            return {
-                ...state,
-                isAuthenticated: true,
-                loading: false,
-                user: payload
-            }
-        case REGISTER_SUCCESS:
-        case LOGIN_SUCCESS:
-        case LOGIN_ANON_SUCCESS:
-           // localStorage.setItem('token', payload.token);
-            return {
-                ...state,
-                ...payload,
-                isAuthenticated: true,
-                loading: false
-            }
-        case REGISTER_FAIL:
-        case AUTH_ERROR:
-        case LOGIN_FAIL:
-        case LOGIN_ANON_FAIL:
-        case LOGOUT:
-        case ACCOUNT_DELETED:
-           // localStorage.removeItem('token');
-            return {
-                ...state,
-               // token: null,
-                isAuthenticated: false,
-                loading: false,
-                user: null
-            }
-        default:
-            return state;
-    }
-} */

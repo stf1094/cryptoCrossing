@@ -7,6 +7,8 @@ import { Provider } from 'react-redux';
 import store from '../store/index';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUser } from '@/store/actions/authAction';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // const inter = Inter({ subsets: ['latin'] })
 
@@ -28,6 +30,7 @@ export default function RootLayout({ children }) {
              <Navbar2 /> 
             {/*  <Entry children={...children} /> */}
              {children} 
+             <ToastContainer pauseOnHover={false} position="top-center" />
            </div>
        </Provider> 
      </body>

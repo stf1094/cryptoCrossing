@@ -173,7 +173,7 @@ export const fetchPortfolio = () => dispatch => {
             dispatch({type: "fetchPortfolioSuccess", payload: snapshot.docs.map(doc => ({id: doc.id, ...doc.data()}))})
             //console.log(snapshot.docs.map(doc => ({id: doc.id, ...doc.data()})));
             let total = 0;
-            snapshot.docs.forEach(function(doc) {
+            snapshot.docs.forEach((doc) => {
                // console.log(doc.data());
                // console.log(doc.data().currentPrice);
                 total = total + doc.data().amount * doc.data().currentPrice;

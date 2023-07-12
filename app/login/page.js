@@ -11,7 +11,7 @@ function Login() {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const router = useRouter();
-  const {isAuthenticated, user} = useSelector((state) => state.auth);
+  const {isAuthenticated, user, error} = useSelector((state) => state.auth);
 
   const [formData, setFormData] = useState({
     email: '',
@@ -67,8 +67,6 @@ useEffect(() => {
                 value={password}
                 onChange={e => onChange(e)}
                 name="password"
-                minLength="6"
-                maxLength="10"
             />
             </div>
             
