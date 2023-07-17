@@ -4,7 +4,7 @@ import { motion } from "framer-motion"
 function Loading() {
   return (
     <>
-    <div className="flex-auto flex-column h-screen content-center items-center justify-center">
+    <div className="flex-auto flex-column content-center items-center justify-center">
         <motion.div style={{width: "150px", height: "150px", background: "#444"}} 
             animate={{
                 scale: [1, 2, 2, 1, 1],

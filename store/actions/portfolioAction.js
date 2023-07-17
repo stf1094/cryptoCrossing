@@ -1,4 +1,4 @@
-import { db, auth } from "@/firebaseConfig";
+import { db, auth } from "../../firebaseConfig";
 import { collection, getDocs, updateDoc, addDoc, doc, deleteDoc } from 'firebase/firestore';
 import { toast } from 'react-toastify';
 
