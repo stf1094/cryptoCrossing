@@ -4,13 +4,12 @@ import { register } from '../../store/actions/authAction';
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-// import { setAlert } from '../../actions/alertAction';
-// import { Redirect } from "react-router-dom";
+// import Loading from "@/components/Loading";
 
 const Register = () => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const {isAuthenticated, user} = useSelector((state) => state.auth);
+  const {isAuthenticated, user, loading} = useSelector((state) => state.auth);
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -59,7 +58,7 @@ const onSubmit = e => {
 }; */
 useEffect(() => {
   if(isAuthenticated) {
-    router.push('/dashboard');
+    router.push('/portfolio');
   }
 }, [user]);
 

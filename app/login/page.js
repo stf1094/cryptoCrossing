@@ -39,9 +39,10 @@ useEffect(() => {
 
   return (
     <>
-    {loading ? <Loading /> : 
+   
      <div className="grid xs:grid-cols-1 xl:grid-cols-4 xl:gap-7">
       <div className="bg-sky-500 h-screen xs:hidden xl:block"></div>
+     
       <div className="sign-in-container flex flex-column mx-auto my-auto h-screen w-screen sm:justify-center xs:mt-14 xs:px-8 sm:-mt-10 xl:col-span-2">
         <Image src={logoFull} alt="crypto-logo" className="h-12 w-12 mb-7"></Image>
         <h1 className="large text-black font-bold">Log In</h1>
@@ -77,9 +78,10 @@ useEffect(() => {
            Forgot your password? <Link className="text-blue-500" href="/forgotpassword">Click Here</Link>
         </p>
         </div>
+         
         <div className="bg-blue-500 h-screen w-100 xs:hidden xl:block"></div>
         </div>
-    }
+   
     </>
   )
 }

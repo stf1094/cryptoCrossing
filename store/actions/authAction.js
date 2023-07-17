@@ -86,9 +86,9 @@ export const setUser = () => dispatch => {
 
 export const login = (email, password) => async dispatch => {
     try {
-        dispatch({type: "loginRequest"});
         await signInWithEmailAndPassword(auth, email, password)
         .then(user => {
+            dispatch({type: "loginRequest"});
             dispatch({type: "loginSuccess", payload: user});
             dispatch(setUser());
         }).catch(err => {
