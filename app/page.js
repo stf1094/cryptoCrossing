@@ -4,11 +4,15 @@ import Link from 'next/link';
 import logoIcon from '../assets/cc-logo-main.png';
 import logo from '../assets/cc-logo-icon.png';
 import { useState, Suspense, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useRouter } from "next/navigation";
 import { Dialog } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBarChart, faChartLine, faNewspaper, faCoins } from '@fortawesome/free-solid-svg-icons';
 import HomePriceTable from '@/components/HomePriceTable';
+import { setUser } from '@/store/actions/authAction';
+import Loading from '@/components/Loading';
 
 const config = {
   headers: {
@@ -29,10 +33,23 @@ const navigation = [
 ]
 
 export default function Home() {
+  const {isAuthenticated, loading} = useSelector((state) => state.auth);
+  const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [homeCoins, setHomeCoins] = useState([]);
+  // const [homeLoading, setHomeLoading] = useState(false);
+  const dispatch = useDispatch();
   // const market = getMarketData();
   // const [coins] = await Promise.all([market]);
+  useEffect(() => {
+    dispatch(setUser());
+  }, []);
+  useEffect(() => {
+    if (isAuthenticated) {
+      // console.log("user not authenticated to view this page...");
+      router.push('/portfolio');
+    }
+  }, []);
 
   useEffect(() => {
     console.log('before data fetch');
@@ -47,6 +64,7 @@ export default function Home() {
 
   return (
     <>
+    {!loading ? 
     <main>
     <header className="absolute inset-x-0 top-0 z-50">
        <nav className="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
@@ -218,6 +236,7 @@ export default function Home() {
         <p className="mt-1 mb-10">Built with React, NextJS, Redux, Firebase, & Coin Gecko API.</p>
         </section>
     </main>
+    : <Loading />}
     </>
   )
 }

@@ -22,6 +22,7 @@ function News() {
       router.push('/login');
     }
   }, []);
+  
     useEffect(() => {
       dispatch(fetchNews());
       dispatch(fetchBitcoinNews());

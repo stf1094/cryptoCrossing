@@ -6,12 +6,12 @@ import { useRouter } from "next/navigation";
 import { login } from '../../store/actions/authAction';
 import Image from 'next/image';
 import logoFull from '@/assets/cc-logo-icon.png';
+import Loading from "@/components/Loading";
 
 function Login() {
-  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const router = useRouter();
-  const {isAuthenticated, user, error} = useSelector((state) => state.auth);
+  const {isAuthenticated, user, error, loading} = useSelector((state) => state.auth);
 
   const [formData, setFormData] = useState({
     email: '',
@@ -24,9 +24,7 @@ const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value
 
 const onSubmit = e => {
     e.preventDefault();
-    setLoading(true);
     dispatch(login(email, password));
-    setLoading(false);
 }
 
 useEffect(() => {
@@ -41,7 +39,7 @@ useEffect(() => {
 
   return (
     <>
-    {loading ? <div>loading...</div> : 
+    {loading ? <Loading /> : 
      <div className="grid xs:grid-cols-1 xl:grid-cols-4 xl:gap-7">
       <div className="bg-sky-500 h-screen xs:hidden xl:block"></div>
       <div className="sign-in-container flex flex-column mx-auto my-auto h-screen w-screen sm:justify-center xs:mt-14 xs:px-8 sm:-mt-10 xl:col-span-2">

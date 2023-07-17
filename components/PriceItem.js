@@ -8,7 +8,7 @@ function PriceItem(props) {
           </div>
           <div className="flex-row xs:basis-3/12">
              <img className="price-table-coin-image" alt="coin-logo" src={props.image} />
-             <span>{props.id}</span>
+             <span>{props.name}</span>
           </div>
             <div className="xs:basis-2/12 xs:text-right lg:text-left">
                 <span>${props.price}</span>

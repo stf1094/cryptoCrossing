@@ -5,7 +5,8 @@ import {
     onAuthStateChanged, createUserWithEmailAndPassword,
     sendEmailVerification, updateEmail,
     updatePassword, sendPasswordResetEmail,
-    deleteUser, reauthenticateWithCredential
+    deleteUser, reauthenticateWithCredential,
+    setPersistence, browserLocalPersistence
   } from 'firebase/auth';
 import { collection, doc, getDocs, addDoc, setDoc, Timestamp, updateDoc } from 'firebase/firestore';
 import { toast } from 'react-toastify';
@@ -65,13 +66,14 @@ export const deleteAccount = () => dispatch => {
     })
 }
 
-//set user (from another youtube video)
+//set user
 export const setUser = () => dispatch => {
     try {
         dispatch({type: "loadUserRequest"});
         onAuthStateChanged(auth, (user) => {
             if(user) {
-                dispatch({type: "loadUserSuccess", payload: user})
+                dispatch({type: "loadUserSuccess", payload: user});
+                setPersistence(auth, browserLocalPersistence);
             } else {
                 dispatch({type: "loadUserFail", payload: "no user at this time"});
             }
@@ -136,7 +138,6 @@ export const logout = () => async dispatch => {
 
  //Update User Email -- if user is already logged in
  export const updateUserEmail = (newEmail, cred) => async dispatch => {
-    // console.log(newEmail);
     const userRef = doc(db, "users", auth.currentUser.uid);
     return reauthenticateWithCredential(auth.currentUser, cred)
      .then(() => {
