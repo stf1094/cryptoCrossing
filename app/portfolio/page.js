@@ -103,7 +103,7 @@ return (
         </div>
     </header>
     <main>
-        <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8"> 
+        <div className="mx-auto max-w-7xl py-6 xs:px-8 sm:px-6 lg:px-8"> 
             <UpdateCoinModal showUpdateModal={showUpdateModal} setShowUpdateModal={setShowUpdateModal} coinOptions={coinOptions} modalCoinId={modalCoinId} modalCoin={modalCoin} modalAmount={modalAmount} />
             <AddCoinModal showAddCoinModal={showAddCoinModal} setShowAddCoinModal={setShowAddCoinModal} coinsList={coinOptions} seeValue={handleSeeValue} />
             <div className="dashboard">

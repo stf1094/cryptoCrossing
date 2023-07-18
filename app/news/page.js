@@ -22,7 +22,7 @@ function News() {
       router.push('/login');
     }
   }, []);
-  
+
     useEffect(() => {
       dispatch(fetchNews());
       dispatch(fetchBitcoinNews());
@@ -71,7 +71,7 @@ function News() {
             <Tab.Panels className="mt-2">
               <Tab.Panel
               className={classNames(
-                'rounded-xl bg-white p-3',
+                'sm:rounded-xl bg-white p-3',
                 'ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2'
               )}>
                 <BtcNewsList btcNews={btcNews} /> 
@@ -79,18 +79,17 @@ function News() {
               </Tab.Panel>
               <Tab.Panel
               className={classNames(
-                'rounded-xl bg-white p-3',
+                'sm:rounded-xl bg-white p-3',
                 'ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2'
               )}>
                 <NewsList news={news} /> 
               </Tab.Panel>
               <Tab.Panel
               className={classNames(
-                'rounded-xl bg-white p-3',
+                'sm:rounded-xl bg-white p-3',
                 'ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2'
               )}>
                  <AltsNewsList altsNews={altsNews} /> 
-                
               </Tab.Panel>
             </Tab.Panels>
           </Tab.Group>

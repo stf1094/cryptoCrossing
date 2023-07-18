@@ -1,8 +1,9 @@
 "use client";
 import Image from 'next/image';
 import Link from 'next/link';
-import logoIcon from '../assets/cc-logo-main.png';
-import logo from '../assets/cc-logo-icon.png';
+import logo from '../assets/crypto-crossing-logo.png';
+import logoWhite from '../assets/crypto-crossing-logo-white.png';
+import iconLogo from '../assets/crypto-crossing-icon.png';
 import { useState, Suspense, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useRouter } from "next/navigation";
@@ -71,7 +72,7 @@ export default function Home() {
           <div className="flex lg:flex-1">
             <a href="#" className="-m-1.5 p-1.5">
               <span className="sr-only">Crypto Crossing</span>
-              <Image src={logo} alt="logo" className="h-8 w-auto"></Image>
+              <Image src={logo} alt="logo" className="h-12 w-auto"></Image>
             </a>
           </div>
           <div className="flex lg:hidden">
@@ -92,8 +93,8 @@ export default function Home() {
             ))}
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-             <Link href='/login' className='bg-sky-400 text-white py-3 px-4 rounded-lg hover:bg-sky-300 mr-2'>Login</Link>
-             <Link href='/register' className='bg-blue-500 text-white py-3 px-4 rounded-lg hover:bg-blue-400 mr-2'>Sign Up</Link>
+             <Link href='/login' className='text-sm bg-sky-400 text-white py-2 px-3 rounded-lg hover:bg-sky-300 mr-2'>Login</Link>
+             <Link href='/register' className='text-sm bg-blue-500 text-white py-2 px-3 rounded-lg hover:bg-blue-400 mr-2'>Sign Up</Link>
           </div>
         </nav>
         <Dialog as="div" className="lg:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
@@ -102,10 +103,10 @@ export default function Home() {
             <div className="flex items-center justify-between">
               <a href="#" className="-m-1.5 p-1.5">
                 <span className="sr-only">Your Company</span>
-                <img
-                  className="h-8 w-auto"
-                  src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                  alt=""
+                <Image
+                  className="h-10 w-auto"
+                  src={iconLogo}
+                  alt="icon logo"
                 />
               </a>
               <button
@@ -231,7 +232,7 @@ export default function Home() {
       </svg>
      
       <div className="footer-inner">
-        <Image src={logoIcon} alt="footer-background" className="footer-logo"></Image>
+        <Image src={logoWhite} alt="footer-background" className="footer-logo"></Image>
         </div>
         <p className="mt-1 mb-10">Built with React, NextJS, Redux, Firebase, & Coin Gecko API.</p>
         </section>

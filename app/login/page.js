@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { login } from '../../store/actions/authAction';
 import Image from 'next/image';
-import logoFull from '@/assets/cc-logo-icon.png';
+import logo from '@/assets/crypto-crossing-logo.png';
 import Loading from "@/components/Loading";
 
 function Login() {
@@ -44,7 +44,7 @@ useEffect(() => {
       <div className="bg-sky-500 h-screen xs:hidden xl:block"></div>
      
       <div className="sign-in-container flex flex-column mx-auto my-auto h-screen w-screen sm:justify-center xs:mt-14 xs:px-8 sm:-mt-10 xl:col-span-2">
-        <Image src={logoFull} alt="crypto-logo" className="h-12 w-12 mb-7"></Image>
+        <Image src={logo} alt="crypto-logo" className="w-44 mb-12"></Image>
         <h1 className="large text-black font-bold">Log In</h1>
         <p className="lead"><i className="fas fa-user"></i> Sign into your Account</p>
           <form className="form" onSubmit={e => onSubmit(e)}>

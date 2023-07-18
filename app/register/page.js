@@ -4,6 +4,8 @@ import { register } from '../../store/actions/authAction';
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from 'next/image';
+import logo from '@/assets/crypto-crossing-logo.png';
 // import Loading from "@/components/Loading";
 
 const Register = () => {
@@ -67,6 +69,7 @@ useEffect(() => {
      <div className="grid xs:grid-cols-1 xl:grid-cols-4 xl:gap-7">
       <div className="bg-sky-500 h-screen xs:hidden xl:block"></div>
       <div className="register-container flex flex-column mx-auto my-auto h-screen w-screen sm:justify-center xs:mt-14 xs:px-8 sm:-mt-10 xl:col-span-2">
+      <Image src={logo} alt="crypto-logo" className="w-44 mb-12"></Image>
         <h1 className="large text-black font-bold">Sign Up</h1>
         <p className="lead"><i className="fas fa-user"></i> Create Your Account</p>
         <form className="form" onSubmit={e => onSubmit(e)}>

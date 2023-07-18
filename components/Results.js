@@ -61,8 +61,8 @@ function Results({setModalAmount, setModalCoin, setModalCoinId, openUpdateModal}
                 <span className="coin-price">${item.currentPrice}</span>
                 <span className="coin-total-amount">${item.value.toFixed(2)}</span>
                 <div className="button-group mt-q flex flex-row">
-                  <PencilSquareIcon className="h-8 w-8 mr-3 hover:cursor-pointer hover:text-sky-400" aria-hidden="true" onClick={() => handleUpdateClick(item.amount, item.name, item.id)} />
-                  <TrashIcon className="h-8 w-8 hover:cursor-pointer hover:text-red-400" aria-hidden="true" onClick={() => openDeleteModal(item.id, item.name, item.amount)} />
+                  <PencilSquareIcon className="xs:h-6 xs:w-6 sm:h-8 sm:w-8 mr-3 hover:cursor-pointer hover:text-sky-400" aria-hidden="true" onClick={() => handleUpdateClick(item.amount, item.name, item.id)} />
+                  <TrashIcon className="xs:h-6 xs:w-6 sm:h-8 sm:w-8 hover:cursor-pointer hover:text-red-400" aria-hidden="true" onClick={() => openDeleteModal(item.id, item.name, item.amount)} />
                   {/*  <span className="" onClick={handleUpdateClick}>edit</span>
                    <span className="" onClick={() => deleteACoin(item.id)}>cancel</span> */}
                 </div>
