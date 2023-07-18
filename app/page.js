@@ -171,7 +171,7 @@ export default function Home() {
         </svg>
       </div>
       <div className="w-screen bg-blue-500 flex flex-column items-center">
-        <div className="container my-24">
+        <div className="container my-24 sm:px-4 md:px-2">
       {/*     <div className="flex flex-row rounded-t-xl mx-auto max-w-5xl py-6 sm:px-6 lg:px-8 font-bold border-white">
             <h5 className="xs:basis-1/12 pl-2">#</h5>
             <h5 className="xs:basis-3/12 text-left">Coin</h5>

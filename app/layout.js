@@ -12,6 +12,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { PersistGate } from 'reduxjs-toolkit-persist/integration/react';
 import { persistStore } from 'reduxjs-toolkit-persist';
+import { Analytics } from '@vercel/analytics/react';
 
 // const inter = Inter({ subsets: ['latin'] })
 
@@ -33,13 +34,15 @@ export default function RootLayout({ children }) {
         <Provider store={store}> 
           <PersistGate persistor={persistor}>
              <div className="">
-               <Navbar2 /> 
+                 <Navbar2 /> 
               {/*  <Entry children={...children} /> */}
                  {children} 
+                 <Analytics />
                <ToastContainer pauseOnHover={false} position="top-center" />
              </div>
            </PersistGate>
        </Provider> 
+      
      </body>
    </html>
   )
