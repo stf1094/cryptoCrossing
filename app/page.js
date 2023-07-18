@@ -232,7 +232,7 @@ export default function Home() {
       </svg>
      
       <div className="footer-inner">
-        <Image src={logoWhite} alt="footer-background" className="footer-logo"></Image>
+        <Image src={logoWhite} alt="footer-logo" className="w-44"></Image>
         </div>
         <p className="mt-1 mb-10">Built with React, NextJS, Redux, Firebase, & Coin Gecko API.</p>
         </section>
