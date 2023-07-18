@@ -2,9 +2,7 @@ import React, {useRef, useState} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { deleteACoin } from '../store/actions/portfolioAction';
 import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline';
-import Image from 'next/image';
 import DeleteCoinModal from './DeleteCoinModal';
-
 
 function Results({setModalAmount, setModalCoin, setModalCoinId, openUpdateModal}) {
   const {portfolio, total} = useSelector((state) => state.portfolio);
@@ -20,15 +18,8 @@ function Results({setModalAmount, setModalCoin, setModalCoinId, openUpdateModal}
     setCoinToDeleteName(name);
     setCoinToDeleteAmount(amount);
     setShowDeleteCoinModal(prev => !prev);
-    console.log('clicked');
   }
   const handleUpdateClick = (amount, name, id) => {
-     //console.log(e.target.parentElement.parentElement.id);
-     // console.log(inputAmount);
-     //console.log(e.target.parentElement.previousSibling.previousSibling.previousSibling.innerHTML);
-    // const id = e.target.parentElement.parentElement.id;
-     //const amount = e.target.parentElement.previousSibling.previousSibling.previousSibling.firstChild.nextSibling.firstChild.nextSibling.firstChild.innerHTML;
-     //const coin = e.target.parentElement.previousSibling.previousSibling.previousSibling.firstChild.nextSibling.firstChild.innerHTML;
      setModalAmount(amount);
      setModalCoin(name);
      setModalCoinId(id);
@@ -64,23 +55,10 @@ function Results({setModalAmount, setModalCoin, setModalCoinId, openUpdateModal}
                 <div className="button-group mt-q flex flex-row">
                   <PencilSquareIcon className="xs:h-6 xs:w-6 sm:h-8 sm:w-8 mr-3 hover:cursor-pointer hover:text-sky-400" aria-hidden="true" onClick={() => handleUpdateClick(item.amount, item.name, item.id)} />
                   <TrashIcon className="xs:h-6 xs:w-6 sm:h-8 sm:w-8 hover:cursor-pointer hover:text-red-400" aria-hidden="true" onClick={() => openDeleteModal(item.id, item.name, item.amount)} />
-                  {/*  <span className="" onClick={handleUpdateClick}>edit</span>
-                   <span className="" onClick={() => deleteACoin(item.id)}>cancel</span> */}
                 </div>
              </div>
         )}
-         {/*    <div className="total-container">
-                <div className="flex-row justify-content-center light-blue-text">
-                  {total ? 
-                 <></> : 
-                  <div className="flex-column">
-                    <h1>Create your Portfolio</h1>
-                    <button className="btn btn-gradient mb-2" onClick={openAddCoinModal}>Let's Go</button>
-                  </div> 
-                  }  
-                </div>
-            </div> */}
-            </div>
+        </div>
         </>
     )
 }

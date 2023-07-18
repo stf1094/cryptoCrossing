@@ -62,7 +62,7 @@ const AddCoinModal = ({showAddCoinModal, setShowAddCoinModal, coinsList, seeValu
                         </Dialog.Title>
                         <div className="flex flex-column mt-2">
                           <select className="select-coin mt-2 focus:ring-sky-300" value={selectValue} onChange={handleSelectChange}>
-                            { coinsList.map(item => <option label={item.id} key={item.id}>{item.id}</option>) }  
+                            { coinsList && coinsList.map(item => <option label={item.id} key={item.id}>{item.id}</option>) }  
                           </select>
                           <input className="input-amount mt-2 focus:ring-sky-400 active:ring-sky-200" type="text" value={inputValue} onChange={handleChange} />  
                           </div>

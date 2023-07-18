@@ -93,27 +93,6 @@ function News() {
               </Tab.Panel>
             </Tab.Panels>
           </Tab.Group>
-         
-        {/*   <Tabs>
-            <TabList>
-              <Tab>Bitcoin</Tab>
-              <Tab>General</Tab>
-              <Tab>Alts</Tab>
-            </TabList>
-
-            <TabPanel>
-                <div>btc news</div>
-              {/*   <BtcNewsList btcNews={btcNews} /> 
-            </TabPanel>
-            <TabPanel>
-                <div>news</div>
-              {/*  <NewsList news={news} />
-            </TabPanel>
-            <TabPanel>
-                <div>alts news</div>
-            {/*   <AltsNewsList altsNews={altsNews} /> 
-            </TabPanel>
-          </Tabs>  */}
           </div>
         </main>
       </>
@@ -121,27 +100,3 @@ function News() {
 }
 
 export default News;
-
- {/*       <div style={{margin: "3em auto 1em auto"}}>    
-      
-          <Tabs>
-            <TabList>
-              <Tab>Bitcoin</Tab>
-              <Tab>General</Tab>
-              <Tab>Alts</Tab>
-            </TabList>
-
-            <TabPanel>
-                <div>btc news</div>
-                <BtcNewsList btcNews={btcNews} />
-            </TabPanel>
-            <TabPanel>
-                <div>news</div>
-               <NewsList news={news} />
-            </TabPanel>
-            <TabPanel>
-                <div>alts news</div>
-              <AltsNewsList altsNews={altsNews} /> 
-            </TabPanel>
-          </Tabs> 
-        </div> */}

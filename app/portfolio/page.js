@@ -1,5 +1,5 @@
 "use client";
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, Suspense} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from "next/navigation";
 import { addACoin, fetchPortfolio, updatePrices } from '../../store/actions/portfolioAction';
@@ -9,14 +9,21 @@ import Results from '../../components/Results';
 import UpdateCoinModal from '../../components/UpdateCoinModal';
 import { ArrowPathRoundedSquareIcon, PlusCircleIcon } from '@heroicons/react/24/outline';
 // import { setUser } from '@/store/actions/authAction';
-const config = {
+import useSWR from 'swr';
+
+const options = {
+    method: "GET",
     headers: {
         'Access-Control-Allow-Origin': 'https://api.coingecko.com/api/v3',
-    }
+    },
 }
+const fetcher = (url) => fetch(url, options).then((res) => res.json());
+const API = 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false';
+
 const Portfolio = () => {
     const router = useRouter();
-    const [coinOptions, setCoinOptions] = useState([]);
+    const { data, error } = useSWR(API, fetcher);
+    // const [coinOptions, setCoinOptions] = useState([]);
     const [list, setList] = useState([]);
     const [showUpdateModal, setShowUpdateModal] = useState(false);
     const [modalCoin, setModalCoin] = useState(null);
@@ -37,14 +44,14 @@ const Portfolio = () => {
           setShowAddCoinModal(prev => !prev);
           console.log('clicked');
     }
-    React.useEffect(() => {
+ /*    React.useEffect(() => {
         fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false', config)
             .then((res) => res.json()) 
             .then((data) => {
                 setCoinOptions(data);
             })
-    }, []);
-
+    }, []); */
+    // console.log(data);
     useEffect(() => {
         if (!isAuthenticated) {
           console.log("user not authenticated to view this page...");
@@ -54,17 +61,16 @@ const Portfolio = () => {
 
     useEffect(() => {
         if (user && isAuthenticated) {
-          console.log(user.uid);
           dispatch(fetchPortfolio(user.uid));
-          dispatch(updatePrices(coinOptions, user.uid));
+          dispatch(updatePrices(data, user.uid));
         }
         console.log('hey from inside fetchPOrtfolio/update prices inside Dash');
     }, []); 
 
     const onUpdatePrices = () => {
-        if (user && isAuthenticated) {
+        if (user && isAuthenticated && data) {
         console.log('on update prices');
-        dispatch(updatePrices(coinOptions, user.uid));
+        dispatch(updatePrices(data, user.uid));
     }
     }
 
@@ -74,10 +80,10 @@ const Portfolio = () => {
         // console.log(index.id);
         // console.log(coinOptions[index].id);
         // const total = value * select;
-        const total = value * coinOptions[index].current_price;
-        const coinName = coinOptions[index].name;
-        const symbol = coinOptions[index].symbol;
-        const img = coinOptions[index].image;
+        const total = value * data[index].current_price;
+        const coinName = data[index].name;
+        const symbol = data[index].symbol;
+        const img = data[index].image;
         const newPriceSub = {
           coinTotal: total,
           name: coinName,
@@ -85,10 +91,10 @@ const Portfolio = () => {
         const newCoin = {
             amount: Number(value),
             name: coinName,
-            coinId: coinOptions[index].id,
+            coinId: data[index].id,
         // currentPrice: select,
-            currentPrice: coinOptions[index].current_price,
-            value: value * coinOptions[index].current_price,
+            currentPrice: data[index].current_price,
+            value: value * data[index].current_price,
             symbol: symbol,
             img: img
         }
@@ -104,8 +110,10 @@ return (
     </header>
     <main>
         <div className="mx-auto max-w-7xl py-6 xs:px-8 sm:px-6 lg:px-8"> 
-            <UpdateCoinModal showUpdateModal={showUpdateModal} setShowUpdateModal={setShowUpdateModal} coinOptions={coinOptions} modalCoinId={modalCoinId} modalCoin={modalCoin} modalAmount={modalAmount} />
-            <AddCoinModal showAddCoinModal={showAddCoinModal} setShowAddCoinModal={setShowAddCoinModal} coinsList={coinOptions} seeValue={handleSeeValue} />
+            <Suspense fallback={<div>Loading...</div>}>
+              <UpdateCoinModal showUpdateModal={showUpdateModal} setShowUpdateModal={setShowUpdateModal} coinOptions={data} modalCoinId={modalCoinId} modalCoin={modalCoin} modalAmount={modalAmount} />
+              <AddCoinModal showAddCoinModal={showAddCoinModal} setShowAddCoinModal={setShowAddCoinModal} coinsList={data} seeValue={handleSeeValue} />
+            </Suspense>
             <div className="dashboard">
                 <div className="dashboard-header">
                     <div className="portfolio-title-group">

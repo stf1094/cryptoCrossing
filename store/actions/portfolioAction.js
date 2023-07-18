@@ -173,24 +173,24 @@ export const getHotColdCoins = () => async dispatch => {
                 cold30.push(item);
             }
         })
-        console.log("hot7", hot7);
-        console.log("hot30", hot30);
-        console.log("cold7", cold7);
-        console.log("cold30", cold30);
+        //console.log("hot7", hot7);
+        //console.log("hot30", hot30);
+        //console.log("cold7", cold7);
+        //console.log("cold30", cold30);
     }).then(() => {
         // order hot and cold
         const orderedHot7 = hot7.sort((a,b) => 
             a.price_change_percentage_7d_in_currency > b.price_change_percentage_7d_in_currency ? -1 * 1 : 1 * 1);
-        console.log("ordered Hot 7", orderedHot7);
+        //console.log("ordered Hot 7", orderedHot7);
         const orderedHot30 = hot30.sort((a,b) =>
             a.price_change_percentage_30d_in_currency > b.price_change_percentage_30d_in_currency ? -1 * 1 : 1 * 1);
-        console.log("ordered Hot 30", orderedHot30);
+        //console.log("ordered Hot 30", orderedHot30);
         const orderedCold7 = cold7.sort((a,b) =>
             a.price_change_percentage_7d_in_currency > b.price_change_percentage_7d_in_currency ? -1 * 1 : 1 * 1);
-        console.log("ordered Cold 7", orderedCold7);
+        //console.log("ordered Cold 7", orderedCold7);
         const orderedCold30 = cold30.sort((a,b) =>
             a.price_change_percentage_30d_in_currency > b.price_change_percentage_30d_in_currency ? -1 * 1 : 1 * 1);
-        console.log("ordered Cold 30", orderedCold30);
+        //console.log("ordered Cold 30", orderedCold30);
         // push hot and cold to reducer, action, etc...
         dispatch({type: "fetchHotCoinsSuccess", payload: {orderedHot7, orderedHot30}});
         dispatch({type: "fetchColdCoinsSuccess", payload: {orderedCold7, orderedCold30}});
