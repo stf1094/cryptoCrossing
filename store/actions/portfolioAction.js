@@ -35,7 +35,7 @@ export const addACoin = (coin, portfolio) => async dispatch => {
     await updateDoc(coinDoc, {amount: newAmount, value: newAmount * coin.currentPrice})
         .then(() => {
             dispatch({type: "addCoinSuccess"});
-            dispatch(fetchPortfolio());
+            dispatch(fetchPortfolio(auth.currentUser.uid));
             toast.success(`Updated ${coin.name} successfully to ${newAmount}.`);
         }).catch((err) => {
             console.log(err.message);
@@ -45,144 +45,15 @@ export const addACoin = (coin, portfolio) => async dispatch => {
         await addDoc(coinsColl, coin)
         .then(() => {
             dispatch({type: "addCoinSuccess"});
-            dispatch(fetchPortfolio());
+            dispatch(fetchPortfolio(auth.currentUser.uid));
             toast.success(`${coin.amount} ${coin.name} add to your portfolio!`);
-        }).catch(error => {
+        }).catch((error) => {
             console.log(error.message);
             dispatch({type: "addCoinFail"});
+            toast.error(error.message)
             toast.error(`There was an error adding ${coin.amount} ${coin.name} to your portfolio. Please try again...`);
-        }).then(() => {
-            console.log('hey from inside false');
-        }) 
+        });
    }
-   
-     
-   /* portfolio.forEach((item) => {
-        currentCoinsArray.push(item);
-   });
-   console.log(currentCoinsArray); */
-    
-
-     
-    /*  console.log(currentCoinsArray);
-     const findMatch = (value, index, array) => {
-        return value === coin.coinId;
-    }
-     let match = currentCoinsArray.find(findMatch);
-    
-     console.log("the match: ", match);
- */
-
-     
-
-  
-    
-
-  /*   if (isMatch) {
-        console.log(isMatch);
-    }
-
-    if(!isMatch) {
-    res.add(coin)
-    .then(() => {
-        dispatch({type: ADD_COIN});
-        dispatch(fetchPortfolio());
-    }).catch(error => {
-        console.log(error.message);
-        dispatch({type: ADDCOIN_FAIL});
-    }).then(() => {
-        console.log('hey from inside false');
-    }) 
-    } */
-
-   // if(res.includes(coin.coinId)) {
-    //    console.log('includes');
-   // }
-        //if the new coin is already in the portfolio:
-    
-           // console.log('its a match: ' + coin.coinId);
-           // console.log(coin.amount);
-           // console.log(item.amount);
-           // console.log(item.coinId);
-   /*          const newAmount = Number(coin.amount) + Number(item.amount);
-            console.log(newAmount);
-            res.doc(item.id).update({amount: newAmount, value: newAmount*item.currentPrice})
-                .then(() => {
-                  //  console.log(index);
-                    dispatch({type: ADD_COIN});
-                    dispatch(fetchPortfolio());
-                }).catch(error => {
-                    console.log(error.message);
-                    dispatch({type: ADDCOIN_FAIL});
-                }).then(() => {
-                    console.log('hey from inside add coin for a matching coin');
-            }) */
-        
-
- /* portfolio.forEach(function(item, index) {
-    switch (coin.coinId, item.coinId) {
-        case (coin.coinId === item.coinId):
-          console.log('match');
-        break;
-        case (coin.coinId !== item.coinId):
-            console.log('no match');
-        break;
-        default:
-            console.log('default');
-    }
-}); */
-   /*  portfolio.every((item, index) => {
-        if (coin.coinId !== item.coinId) {
-            res.add(coin)
-                .then(() => {
-                    dispatch({type: ADD_COIN});
-                    dispatch(fetchPortfolio());
-                }).catch(error => {
-                    console.log(error.message);
-                    dispatch({type: ADDCOIN_FAIL});
-                }).then(() => {
-                    console.log('hey from inside 2nd part of loop');
-                }) 
-                return;
-        } else {
-            console.log('match');
-        }
-    }) */
-
-     /*    else if (coin.coinId !== item.coinId) {
-            console.log(portfolio[index]);
-            console.log(index);
-            console.log(item.coinId);
-            res.add(coin)
-                .then(() => {
-                    dispatch({type: ADD_COIN});
-                    dispatch(fetchPortfolio());
-                }).catch(error => {
-                    console.log(error.message);
-                    dispatch({type: ADDCOIN_FAIL});
-                }).then(() => {
-                    console.log('hey from inside 2nd part of loop');
-                }) 
-                
-        }  */ 
-        /* else if(coin.coinId !== item.coinId) {
-            console.log(index);
-        } */
-
- /*        res.add(coin)
-        .then(() => {
-            dispatch({type: ADD_COIN});
-            dispatch(fetchPortfolio());
-        }).catch(error => {
-            console.log(error.message);
-            dispatch({type: ADDCOIN_FAIL});
-        }).then(() => {
-            console.log('hey from inside add coin')
-        })  */
-     //end first loop
-
-
-
 };
 
 //delete a coin
@@ -191,7 +62,7 @@ export const deleteACoin = (id, amount, name) => dispatch => {
     deleteDoc(coinDoc)
     .then(() => {
         dispatch({type: "deleteCoinSuccess", payload: id});
-        dispatch(fetchPortfolio());
+        dispatch(fetchPortfolio(auth.currentUser.uid));
         toast.success(`${amount} ${name} deleted successfully.`);
     }).catch(error => {
         console.log(error.message);
@@ -264,7 +135,7 @@ export const updatePortfolioItem = (newAmount, id, name, currentPrice) => async 
        const coinDoc = doc(db, "profiles", auth.currentUser.uid, 'coins', id);
        await updateDoc(coinDoc, {amount: newAmount, value: newAmount * currentPrice, currentPrice: currentPrice});
        dispatch({type: "updateCoinSuccess"});
-       dispatch(fetchPortfolio());
+       dispatch(fetchPortfolio(auth.currentUser.uid));
        toast.success(`Updated ${name} successfully to ${newAmount}.`);
     } catch(err) {
         console.log(err.message);
