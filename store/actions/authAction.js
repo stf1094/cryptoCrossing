@@ -6,7 +6,8 @@ import {
     sendEmailVerification, updateEmail,
     updatePassword, sendPasswordResetEmail,
     deleteUser, reauthenticateWithCredential,
-    setPersistence, browserLocalPersistence
+    setPersistence, browserLocalPersistence,
+    signInAnonymously
   } from 'firebase/auth';
 import { collection, doc, getDocs, addDoc, setDoc, Timestamp, updateDoc } from 'firebase/firestore';
 import { toast } from 'react-toastify';
@@ -114,11 +115,14 @@ export const login = (email, password) => async dispatch => {
 }
 
  export const loginAnon = () => dispatch => {
-     auth.signInAnonymously()
-     .then(() => {
-         dispatch({type: "loginAnonSuccess"})
-     }).catch(error => {
-        dispatch({type: "loginAnonFail"})
+     signInAnonymously(auth)
+     .then((user) => {
+         dispatch({type: "loginAnonSuccess", payload: user});
+         dispatch(setUser());
+     }).catch((error) => {
+        dispatch({type: "loginAnonFail", payload: error.message});
+        console.log(error.message);
+        toast.error(error.message);
      });
  }
 

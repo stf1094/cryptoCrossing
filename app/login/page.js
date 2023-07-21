@@ -41,7 +41,7 @@ useEffect(() => {
     <>
    
      <div className="grid xs:grid-cols-1 xl:grid-cols-4 xl:gap-7">
-      <div className="bg-sky-500 h-screen xs:hidden xl:block"></div>
+      <div className="bg-sky-500 h-screen xxs:hidden xl:block"></div>
      
       <div className="sign-in-container flex flex-column mx-auto my-auto h-screen w-screen sm:justify-center xs:mt-14 xs:px-8 sm:-mt-10 xl:col-span-2">
         <Image src={logo} alt="crypto-logo" className="w-44 mb-12"></Image>
@@ -79,7 +79,7 @@ useEffect(() => {
         </p>
         </div>
          
-        <div className="bg-blue-500 h-screen w-100 xs:hidden xl:block"></div>
+        <div className="bg-blue-500 h-screen w-100 xxs:hidden xl:block"></div>
         </div>
    
     </>

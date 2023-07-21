@@ -12,7 +12,7 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBarChart, faChartLine, faNewspaper, faCoins } from '@fortawesome/free-solid-svg-icons';
 import HomePriceTable from '@/components/HomePriceTable';
-import { setUser } from '@/store/actions/authAction';
+import { setUser, loginAnon } from '@/store/actions/authAction';
 import Loading from '@/components/Loading';
 
 const config = {
@@ -34,7 +34,7 @@ const navigation = [
 ]
 
 export default function Home() {
-  const {isAuthenticated, loading} = useSelector((state) => state.auth);
+  const {user, isAuthenticated, loading} = useSelector((state) => state.auth);
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [homeCoins, setHomeCoins] = useState([]);
@@ -45,6 +45,7 @@ export default function Home() {
   useEffect(() => {
     dispatch(setUser());
   }, []);
+
   useEffect(() => {
     if (isAuthenticated) {
       // console.log("user not authenticated to view this page...");
@@ -62,7 +63,10 @@ export default function Home() {
         setHomeCoins(data);
     })
   }, []);
-
+  const handleLoginAnon = async () => {
+    dispatch(loginAnon());
+    router.push('/portfolio');
+  }
   return (
     <>
     {!loading ? 
@@ -159,7 +163,7 @@ export default function Home() {
           </p>
           <div className="buttons text-white mt-7">
             <Link href='/register' className='bg-sky-400 text-white py-5 px-10 rounded-xl hover:bg-sky-300 mr-2'>Sign Up</Link>
-            <button className='bg-blue-500 py-4 px-9 rounded-xl hover:bg-blue-400 ml-2'>Go to App</button>
+            <button onClick={handleLoginAnon} className='bg-blue-500 py-4 px-9 rounded-xl hover:bg-blue-400 ml-2'>Go to App</button>
           </div>
       </div>
       <div className="w-screen">
