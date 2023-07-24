@@ -1,10 +1,11 @@
 import { Fragment, useState } from 'react'
-import { Dialog, Transition } from '@headlessui/react'
+import { Dialog, Transition, RadioGroup } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 
 export default function AddCoinSlideover({showAddCoinSlide, setShowAddCoinSlide, coinsList, seeValue}) {
     const [inputValue, setInputValue] = useState('');
-    const [selectValue, setSelectValue] = useState('');
+    // const [selectValue, setSelectValue] = useState('');
+    const [selected, setSelected] = useState(null);
     const [coinIndex, setIndex] = useState(0);
 
     const closeAddCoinSlide = (event) => {
@@ -12,19 +13,22 @@ export default function AddCoinSlideover({showAddCoinSlide, setShowAddCoinSlide,
     };
   const handleChange = (event) => setInputValue(event.target.value);
 
-  const handleSelectChange = (event) => {
-        setSelectValue(event.target.value);
-        const index = event.target.selectedIndex;
+  const handleSelectChange = (id, index) => {
+        console.log(id, index);
+        setSelected(id);
+        // const index = event.target.selectedIndex;
         setIndex(index);
   }
     
   const handleClick = () => {
+      console.log(selected);
+      console.log(coinIndex);
        // addACoin(inputValue, modalCoinId);
        // seeValue(inputValue, selectValue, coinIndex);
-        seeValue(inputValue, coinIndex);
+       seeValue(inputValue, coinIndex);
         //close modal
-        setInputValue('');
-        setShowAddCoinSlide(false);
+       setInputValue('');
+       setShowAddCoinSlide(false);
   }
 
   return (
@@ -81,10 +85,70 @@ export default function AddCoinSlideover({showAddCoinSlide, setShowAddCoinSlide,
                         Add Coin
                       </Dialog.Title>
                     </div>
-                    <div className="relative basis-10/12 px-3 sm:px-5 h-10/12 overflow-y-scroll mt-3">
-                        <div className="flex flex-column overflow-y-scroll">
-                            {coinsList && coinsList.map(item => (
-                            <div className="flex flex-row justify-between mx-2 py-4 px-1 border-b border-slate-400 hover:bg-sky-50 hover:cursor-pointer" key={item.id}>
+
+
+                    <div className="relative basis-10/12 px-3 sm:px-5 h-10/12 overflow-y-scroll mt-3 ml-3">
+                    <div className="flex flex-column overflow-y-scroll">
+                      <RadioGroup value={selected} onChange={setSelected}>
+                        <RadioGroup.Label className="sr-only">Coin List</RadioGroup.Label>
+                        <div className="space-y-2">
+                            {coinsList && coinsList.map((item, index) => (
+                            <RadioGroup.Option
+                                key={item.id}
+                                onClick={() => setIndex(index)}
+                                value={item}
+                                className={({ active, checked }) =>
+                                `${
+                                    active
+                                    ? 'ring-2 ring-white ring-opacity-60 ring-offset-2 ring-offset-sky-300 hover:bg-sky-900'
+                                    : ''
+                                }
+                                ${
+                                    checked ? 'bg-sky-900 bg-opacity-75 text-white hover:bg-sky-900 hover:bg-opacity-75' : 'bg-white'
+                                }
+                                    relative flex cursor-pointer rounded-lg px-5 py-4 shadow-md focus:outline-none hover:bg-sky-100`
+                                }
+                            >
+                                {({ active, checked }) => (
+                                <>
+                                    <div className="flex w-full items-center justify-between">
+                                    <div className="flex items-center">
+                                    <img src={item.image} alt="coin-logo" className="h-7 w-7 mr-4" />
+                                        <div className="text-sm">
+                                        <RadioGroup.Label
+                                            as="p"
+                                            className={`font-medium  ${
+                                            checked ? 'text-white' : 'text-gray-900'
+                                            }`}
+                                        >
+                                            {item.name}
+                                        </RadioGroup.Label>
+                                        <RadioGroup.Description
+                                            as="span"
+                                            className={`inline ${
+                                            checked ? 'text-sky-100' : 'text-gray-500'
+                                            }`}
+                                        >
+                                            <span>
+                                            {item.symbol.toUpperCase()} - ${item.current_price}
+                                            </span>{' '}
+                                        </RadioGroup.Description>
+                                        </div>
+                                    </div>
+                                    {checked && (
+                                        <div className="shrink-0 text-white">
+                                        <CheckIcon className="h-6 w-6" />
+                                        </div>
+                                    )}
+                                    </div>
+                                </>
+                                )}
+                            </RadioGroup.Option>
+                            ))}
+                        </div>
+                        </RadioGroup>
+                           {/*  {coinsList && coinsList.map((item, index) => (
+                            <div id={index} onClick={() => handleSelectChange(item.id, index)} className="flex flex-row justify-between mx-2 py-4 px-1 border-b border-slate-400 hover:bg-sky-50 hover:cursor-pointer" key={item.id}>
                                 <div className="flex flex-row">
                                   <img src={item.image} alt="coin-logo" className="h-8 w-8" />
                                   <div className="coin-title-amount mt-1">
@@ -95,13 +159,15 @@ export default function AddCoinSlideover({showAddCoinSlide, setShowAddCoinSlide,
                                 <div>${item.current_price}</div>
                             </div>
                             ))
-                            }
+                            } */}
                         
                             {/*   <select className="select-coin mt-2 focus:ring-sky-300" value={selectValue} onChange={handleSelectChange}>
                                 { coinsList && coinsList.map(item => <option label={item.name} key={item.id}>{item.name}</option>) }  
                             </select> */}
                         </div>
                     </div>
+
+
                     <div className='basis-2/12 mt-1 px-4 flex flex-col'>
                     <input placeholder='enter amount' className="input-amount mt-2 focus:ring-sky-400 active:ring-sky-200" type="text" value={inputValue} onChange={handleChange} />  
                     <button
@@ -127,5 +193,79 @@ export default function AddCoinSlideover({showAddCoinSlide, setShowAddCoinSlide,
         </div>
       </Dialog>
     </Transition.Root>
+  )
+}
+
+/*         <RadioGroup value={selected} onChange={setSelected}>
+          <RadioGroup.Label className="sr-only">Server size</RadioGroup.Label>
+          <div className="space-y-2">
+            {coinsList.map((item) => (
+              <RadioGroup.Option
+                key={item.id}
+                value={coin}
+                className={({ active, checked }) =>
+                  `${
+                    active
+                      ? 'ring-2 ring-white ring-opacity-60 ring-offset-2 ring-offset-sky-300'
+                      : ''
+                  }
+                  ${
+                    checked ? 'bg-sky-900 bg-opacity-75 text-white' : 'bg-white'
+                  }
+                    relative flex cursor-pointer rounded-lg px-5 py-4 shadow-md focus:outline-none`
+                }
+              >
+                {({ active, checked }) => (
+                  <>
+                    <div className="flex w-full items-center justify-between">
+                     <img src={item.image} alt="coin-logo" className="h-7 w-7" />
+                      <div className="flex items-center">
+                        <div className="text-sm">
+                          <RadioGroup.Label
+                            as="p"
+                            className={`font-medium  ${
+                              checked ? 'text-white' : 'text-gray-900'
+                            }`}
+                          >
+                            {item.name}
+                          </RadioGroup.Label>
+                          <RadioGroup.Description
+                            as="span"
+                            className={`inline ${
+                              checked ? 'text-sky-100' : 'text-gray-500'
+                            }`}
+                          >
+                            <span>
+                              {item.symbol.toUpperCase()}/{item.current_price}
+                            </span>{' '}
+                            <span aria-hidden="true">&middot;</span>{' '}
+                          </RadioGroup.Description>
+                        </div>
+                      </div>
+                      {checked && (
+                        <div className="shrink-0 text-white">
+                          <CheckIcon className="h-6 w-6" />
+                        </div>
+                      )}
+                    </div>
+                  </>
+                )}
+              </RadioGroup.Option>
+            ))}
+          </div>
+        </RadioGroup> */
+
+function CheckIcon(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" {...props}>
+      <circle cx={12} cy={12} r={12} fill="#fff" opacity="0.2" />
+      <path
+        d="M7 13l3 3 7-7"
+        stroke="#fff"
+        strokeWidth={1.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
   )
 }

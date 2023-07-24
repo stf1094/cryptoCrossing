@@ -95,7 +95,7 @@ function PriceTable(props) {
               }
             </h5>
           </div>
-          { tableData && tableData.map((item, index) => <PriceItem key={index} id={item.id} image={item.image} name={item.name} rank={item.market_cap_rank} price={item.current_price} change30={item.price_change_percentage_30d_in_currency.toFixed(2)} change7={item.price_change_percentage_7d_in_currency.toFixed(2)} change={item.price_change_percentage_24h.toFixed(2)} />) }
+          { tableData && tableData.map((item, index) => <PriceItem key={index} id={item.id} image={item.image} name={item.name} rank={item.market_cap_rank} price={item.current_price} change7={item.price_change_percentage_7d_in_currency.toFixed(2)} change30={item.price_change_percentage_30d_in_currency.toFixed(2)} change={item.price_change_percentage_24h.toFixed(2)} />) }
         </div>
         </>
     )
