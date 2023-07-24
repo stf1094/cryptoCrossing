@@ -10,6 +10,7 @@ import UpdateCoinModal from '../../components/UpdateCoinModal';
 import { ArrowPathRoundedSquareIcon, PlusCircleIcon } from '@heroicons/react/24/outline';
 // import { setUser } from '@/store/actions/authAction';
 import useSWR from 'swr';
+import AddCoinSlideover from '@/components/AddCoinSlideover';
 
 const options = {
     method: "GET",
@@ -30,6 +31,7 @@ const Portfolio = () => {
     const [modalAmount, setModalAmount] = useState(0);
     const [modalCoinId, setModalCoinId] = useState('');
     const [showAddCoinModal, setShowAddCoinModal] = useState(false);
+    const [showAddCoinSlide, setShowAddCoinSlide] = useState(false);
     const {portfolio, total} = useSelector((state) => state.portfolio);
     const { user, isAuthenticated } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
@@ -44,6 +46,10 @@ const Portfolio = () => {
           setShowAddCoinModal(prev => !prev);
           console.log('clicked');
     }
+    const openAddCoinSlide = () => {
+        setShowAddCoinSlide(prev => !prev);
+        console.log('clicked');
+  }
  /*    React.useEffect(() => {
         fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false', config)
             .then((res) => res.json()) 
@@ -113,11 +119,12 @@ return (
             <Suspense fallback={<div>Loading...</div>}>
               <UpdateCoinModal showUpdateModal={showUpdateModal} setShowUpdateModal={setShowUpdateModal} coinOptions={data} modalCoinId={modalCoinId} modalCoin={modalCoin} modalAmount={modalAmount} />
               <AddCoinModal showAddCoinModal={showAddCoinModal} setShowAddCoinModal={setShowAddCoinModal} coinsList={data} seeValue={handleSeeValue} />
+              <AddCoinSlideover showAddCoinSlide={showAddCoinSlide} setShowAddCoinSlide={setShowAddCoinSlide} coinsList={data} seeValue={handleSeeValue} />
             </Suspense>
             <div className="dashboard">
                 <div className="dashboard-header">
                     <div className="portfolio-title-group">
-                      <PlusCircleIcon className="h-10 w-10 hover:cursor-pointer hover:text-sky-300 mr-3" aria-hidden="true" onClick={openAddCoinModal} />
+                      <PlusCircleIcon className="h-10 w-10 hover:cursor-pointer hover:text-sky-300 mr-3" aria-hidden="true" onClick={openAddCoinSlide} />
                       <ArrowPathRoundedSquareIcon className="h-10 w-10 hover:cursor-pointer hover:text-sky-300" aria-hidden="true" onClick={onUpdatePrices} />
                     </div>
                     <span className="dashboard-total">${total ? total.toFixed(2) : "0"}</span> 
