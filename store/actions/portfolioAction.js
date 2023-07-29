@@ -143,6 +143,36 @@ export const updatePortfolioItem = (newAmount, id, name, currentPrice) => async 
         toast.error(`Could not update ${name}. Please try again.`);
     }
 }
+export const getMarket = () => async dispatch => {
+    console.log('getMarket()');
+    let market = [];
+    const config = {
+        headers: {
+            'Access-Control-Allow-Origin': 'https://api.coingecko.com/api/v3',
+        }
+      }
+      try {
+        const res = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false&price_change_percentage=24h%2C7d%2C30d&locale=en&precision=2')
+        .then((res) => res.json())
+        .then((data) => {
+            data.forEach((item) => {
+                market.push({
+                    id: item.id, 
+                    name: item.name, 
+                    image: item.image,
+                    rank: item.market_cap_rank, 
+                    price: item.current_price,
+                    change7: item.price_change_percentage_7d_in_currency, 
+                    change30: item.price_change_percentage_30d_in_currency ? item.price_change_percentage_30d_in_currency : 0.000,
+                    change: item.price_change_percentage_24h_in_currency
+                })
+            })
+        });
+       await dispatch({type: "getMarketSuccess", payload: market})
+    } catch (err) {
+        console.log(err.message);
+    }
+}
 
 export const getHotColdCoins = () => async dispatch => {
     const hot7 = [];
@@ -154,7 +184,7 @@ export const getHotColdCoins = () => async dispatch => {
             'Access-Control-Allow-Origin': 'https://api.coingecko.com/api/v3',
         }
       }
-    const res = fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=200&page=1&sparkline=false&price_change_percentage=24h%2C7d%2C30d&locale=en&precision=2', config)
+    const res = fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=200&page=1&sparkline=false&price_change_percentage=24h%2C7d%2C30d&locale=en&precision=2')
     .then((res) => res.json()) 
     .then((data) => {
         data.forEach((item) => {

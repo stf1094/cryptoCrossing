@@ -26,24 +26,18 @@ export default function Navbar2() {
   const dispatch = useDispatch();
   const router = useRouter();
   const { isAuthenticated } = useSelector((state) => state.auth);
-  let navigation = [];
-  if (!isAuthenticated) {
-    navigation = [
-        { name: 'Login', href: '/login', current: false },
-        { name: 'Sign Up', href: '/register', current: false },
-      ]
-  } else {
-    navigation = [
+  const navigation = [
         { name: 'Portfolio', href: '/portfolio', current: false },
         { name: 'News', href: '/news', current: false },
         { name: 'Market', href: '/market', current: false },
       ]
-  }
-  const userNavigation = [
+
+/*   const userNavigation = [
     { name: 'Your Profile', href: '/' },
     { name: 'Settings', href: '/' },
     { name: 'Sign out', href: '/' },
-  ]
+  ] */
+
   const logoutClick = () => {
     dispatch(logout());
     router.push('/');

@@ -1,6 +1,7 @@
 import { createReducer } from '@reduxjs/toolkit';
 const initialState = {
     loading: false,
+    market: null,
     hot7: null,
     hot30: null,
     cold7: null,
@@ -26,4 +27,9 @@ export const marketReducer = createReducer(initialState, (builder) => {
     state.loading = false;
     state.error = action.payload;
   });
+  builder.addCase("getMarketSuccess", (state, action) => {
+    state.loading = false;
+    state.market = action.payload;
+    state.error = {};
+  })
 });

@@ -24,7 +24,7 @@ function TrendingSlider(props) {
   return (
     <div className="embla overflow-hidden">
       <div className="embla__viewport" ref={emblaRef}>
-        <div className="embla__container">
+        <div className="embla__container hover:cursor-pointer">
           {sliderData && sliderData.map((item, index) => (
               <div className="embla__slide" key={index}>
                     <div className="border border-slate-400 bg-white flex flex-row px-3 py-3 rounded-lg h-full">
@@ -38,17 +38,17 @@ function TrendingSlider(props) {
                             </div>
                         </div>
                         <div className="flex flex-column text-right justify-between w-1/2">
-                          <span className="text-sm green">7d</span>
+                          <span className="text-sm green">30d</span>
                           <span className="xs:text-xl sm:text-2xl lg:text-3xl green">
                           <FontAwesomeIcon className="green xs:mr-2 xl:mr-0" icon={faArrowTrendUp} />
                         {/*   <ArrowTrendingUpIcon className="h-10 w-10 inline-block" /> */}
-                          {item.price_change_percentage_7d_in_currency.toFixed(1)}%</span>
+                          {item.price_change_percentage_30d_in_currency.toFixed(1)}%</span>
                         </div>
                       </div>
               </div>
            ))}
         </div>
-         <button className="embla__prev" onClick={scrollPrev}>
+         <button className="embla__prev mr-2" onClick={scrollPrev}>
           Prev
         </button>
         <button className="embla__next" onClick={scrollNext}>

@@ -13,6 +13,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBarChart, faChartLine, faNewspaper, faCoins } from '@fortawesome/free-solid-svg-icons';
 import HomePriceTable from '@/components/HomePriceTable';
 import { setUser, loginAnon } from '@/store/actions/authAction';
+import { getMarket } from '@/store/actions/portfolioAction';
 import Loading from '@/components/Loading';
 
 const config = {
@@ -30,7 +31,7 @@ const config = {
 const navigation = [
   { name: 'Home', href: '/' },
   { name: 'Features', href: '#' },
-  { name: 'Tech', href: '/tech' },
+  { name: 'Tech', href: '#' },
 ]
 
 export default function Home() {
@@ -44,6 +45,11 @@ export default function Home() {
   // const [coins] = await Promise.all([market]);
   useEffect(() => {
     dispatch(setUser());
+  }, []);
+
+  useEffect(() => {
+    console.log("inside useeffect for get market");
+    dispatch(getMarket());
   }, []);
 
   useEffect(() => {
@@ -69,7 +75,7 @@ export default function Home() {
   }
   return (
     <>
-    {!loading ? 
+  
     <main>
     <header className="absolute inset-x-0 top-0 z-50">
        <nav className="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
@@ -241,7 +247,7 @@ export default function Home() {
         <p className="mt-1 mb-10">Built with React, NextJS, Redux, Firebase, & Coin Gecko API.</p>
         </section>
     </main>
-    : <Loading />}
+ 
     </>
   )
 }

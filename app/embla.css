@@ -1,6 +1,6 @@
 .embla {
     --slide-spacing: 1rem;
-    --slide-size: 20%;
+    --slide-size: 250px;
     --slide-height: 300px;
   }
   .embla__viewport {
@@ -15,7 +15,7 @@
   }
   .embla__slide {
     flex: 0 0 var(--slide-size);
-    min-width: 0;
+    min-width: 250px;
     padding-left: var(--slide-spacing);
     position: relative;
   }
@@ -23,7 +23,7 @@
   /* Add Media Queries  */
   @media (max-width: 1280px) {
     .embla__slide {
-        flex: 0 0 25%;
+        flex: 0 0 250px;
         min-width: 0;
         padding-left: var(--slide-spacing);
         position: relative;
@@ -31,7 +31,7 @@
   }
   @media (max-width: 1024px) {
     .embla__slide {
-        flex: 0 0 33%;
+      flex: 0 0 250px;
         min-width: 0;
         padding-left: var(--slide-spacing);
         position: relative;
@@ -39,7 +39,7 @@
   }
   @media (max-width: 768px) {
     .embla__slide {
-        flex: 0 0 33%;
+      flex: 0 0 33%;
         min-width: 0;
         padding-left: var(--slide-spacing);
         position: relative;
