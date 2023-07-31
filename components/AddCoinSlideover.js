@@ -1,6 +1,7 @@
 import { Fragment, useState } from 'react'
 import { Dialog, Transition, RadioGroup } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
+import { toast } from 'react-toastify';
 
 export default function AddCoinSlideover({showAddCoinSlide, setShowAddCoinSlide, coinsList, seeValue}) {
     const [inputValue, setInputValue] = useState('');
@@ -21,6 +22,9 @@ export default function AddCoinSlideover({showAddCoinSlide, setShowAddCoinSlide,
   }
     
   const handleClick = () => {
+     if (inputValue === '' || inputValue === null || inputValue === 0) {
+      toast.error('Please enter a valid number in the amount field');
+     } else {
       console.log(selected);
       console.log(coinIndex);
        // addACoin(inputValue, modalCoinId);
@@ -29,6 +33,7 @@ export default function AddCoinSlideover({showAddCoinSlide, setShowAddCoinSlide,
         //close modal
        setInputValue('');
        setShowAddCoinSlide(false);
+     }
   }
 
   return (
@@ -169,7 +174,7 @@ export default function AddCoinSlideover({showAddCoinSlide, setShowAddCoinSlide,
 
 
                     <div className='basis-2/12 mt-1 px-4 flex flex-col'>
-                    <input placeholder='enter amount' className="input-amount mt-2 focus:ring-sky-400 active:ring-sky-200" type="text" value={inputValue} onChange={handleChange} />  
+                    <input placeholder='enter amount' className="input-amount mt-2 focus:ring-sky-400 active:ring-sky-200" type="number" value={inputValue} onChange={handleChange} />  
                     <button
                         type="button"
                         className="inline-flex my-2 mx-3 justify-center rounded-md border border-transparent bg-sky-300 py-4 text-sm font-medium text-sky-800 hover:bg-sky-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2"
