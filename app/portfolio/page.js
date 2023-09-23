@@ -110,8 +110,12 @@ const Portfolio = () => {
 return (
   <>
     <header className="bg-white shadow">
-        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900">Portfolio</h1>
+        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 flex-row justify-between">
+           <h1 className="text-3xl font-bold tracking-tight text-gray-900">Portfolio</h1>
+           <div className="flex-row">
+             <PlusCircleIcon className="h-10 w-10 hover:cursor-pointer hover:text-sky-300 mr-3" aria-hidden="true" onClick={openAddCoinSlide} />
+             <ArrowPathRoundedSquareIcon className="h-10 w-10 hover:cursor-pointer hover:text-sky-300" aria-hidden="true" onClick={onUpdatePrices} />
+           </div>
         </div>
     </header>
     <main>
@@ -124,10 +128,10 @@ return (
             <div className="dashboard">
                 <div className="dashboard-header">
                     <div className="portfolio-title-group">
-                      <PlusCircleIcon className="h-10 w-10 hover:cursor-pointer hover:text-sky-300 mr-3" aria-hidden="true" onClick={openAddCoinSlide} />
-                      <ArrowPathRoundedSquareIcon className="h-10 w-10 hover:cursor-pointer hover:text-sky-300" aria-hidden="true" onClick={onUpdatePrices} />
+                     {/*  <PlusCircleIcon className="h-10 w-10 hover:cursor-pointer hover:text-sky-300 mr-3" aria-hidden="true" onClick={openAddCoinSlide} />
+                      <ArrowPathRoundedSquareIcon className="h-10 w-10 hover:cursor-pointer hover:text-sky-300" aria-hidden="true" onClick={onUpdatePrices} /> */}
                     </div>
-                    <span className="dashboard-total">${total ? total.toFixed(2) : "0"}</span> 
+                    <span className="dashboard-total mr-1">${total ? total.toFixed(2) : "0"}</span> 
                 </div>
                 <Results 
                     openUpdateModal={openUpdateModal} 

@@ -249,6 +249,14 @@ img {
 .news-source {
   font-size: .7rem;
 }
+
+.news-title-link {
+  color: #000;
+}
+.news-title-link:hover {
+  text-decoration: underline;
+}
+
 .news-title {
   font-size: 1rem;
   font-weight: bold;

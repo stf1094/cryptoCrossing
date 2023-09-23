@@ -37,6 +37,7 @@ function Market() {
     // console.log('after try catch data fetch');
   }, []); */
   // console.log("Is data ready?", !!data);
+  console.log(hot30);
     return (
             <>
                <header className="bg-white shadow">
@@ -51,7 +52,7 @@ function Market() {
                        <ArrowTrendingUpIcon className="h-10 w-10 inline-block -mt-2 ml-2" />
                     </div>
                     <div className="flex flex-row mb-5 xs:px-4 md:px-0">
-                      {hot30 && <TrendingSlider hot7={hot30.slice(0, 10)} /> } 
+                      {hot30 && <TrendingSlider hot7={hot30} /> } 
                     </div>
                     <h3 className="text-lg font-bold mb-2 xs:px-4 md:px-0">Top 100</h3>
                     <Suspense fallback={<div>Loading...</div>}>

@@ -4,8 +4,8 @@ import { ArrowTrendingUpIcon, ArrowTrendingDownIcon } from '@heroicons/react/24/
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowTrendUp } from '@fortawesome/free-solid-svg-icons';
 
-function TrendingSlider(props) {
-  const [sliderData, setSliderData] = useState(props.hot7);
+function TrendingSlider({ hot7 }) {
+  const [sliderData, setSliderData] = useState(hot7);
   const [emblaRef, emblaApi] = useEmblaCarousel({
     align: "start",
     duration: 35,
@@ -20,7 +20,7 @@ function TrendingSlider(props) {
   const scrollNext = useCallback(() => {
     if (emblaApi) emblaApi.scrollNext()
   }, [emblaApi])
-
+ console.log("sliderData: ", sliderData);
   return (
     <div className="embla overflow-hidden">
       <div className="embla__viewport" ref={emblaRef}>
