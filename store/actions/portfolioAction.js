@@ -162,8 +162,8 @@ export const getMarket = () => async dispatch => {
                     image: item.image,
                     rank: item.market_cap_rank, 
                     price: item.current_price,
-                    change7: item.price_change_percentage_7d_in_currency, 
-                    change30: item.price_change_percentage_30d_in_currency ? item.price_change_percentage_30d_in_currency : 0.000,
+                    change7: Number(item.price_change_percentage_7d_in_currency), 
+                    change30: item.price_change_percentage_30d_in_currency ? Number(item.price_change_percentage_30d_in_currency) : 0.000,
                     change: item.price_change_percentage_24h_in_currency
                 })
             })

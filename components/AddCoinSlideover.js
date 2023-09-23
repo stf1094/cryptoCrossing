@@ -10,8 +10,15 @@ export default function AddCoinSlideover({showAddCoinSlide, setShowAddCoinSlide,
     const [coinIndex, setIndex] = useState(0);
 
     const closeAddCoinSlide = (event) => {
+        setInputValue('');
+        setSelected(null);
         setShowAddCoinSlide(false);
     };
+  
+    const clearSelection = () => {
+      setSelected(null);
+    }
+
   const handleChange = (event) => setInputValue(event.target.value);
 
   const handleSelectChange = (id, index) => {
@@ -185,7 +192,8 @@ export default function AddCoinSlideover({showAddCoinSlide, setShowAddCoinSlide,
                     <button
                         type="button"
                         className="inline-flex my-2 mx-3 justify-center rounded-md border border-transparent bg-gray-200 py-4 text-sm font-medium text-gray-900 hover:bg-gray-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2"
-                        onClick={() => closeAddCoinSlide()}
+                       /*  onClick={() => closeAddCoinSlide()} */
+                        onClick={() => clearSelection()}
                         >
                         cancel
                     </button>
