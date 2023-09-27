@@ -125,6 +125,9 @@ return (
               <AddCoinModal showAddCoinModal={showAddCoinModal} setShowAddCoinModal={setShowAddCoinModal} coinsList={data} seeValue={handleSeeValue} />
               <AddCoinSlideover showAddCoinSlide={showAddCoinSlide} setShowAddCoinSlide={setShowAddCoinSlide} coinsList={data} seeValue={handleSeeValue} />
             </Suspense>
+            {portfolio && portfolio.length > 0 ? (
+
+            
             <div className="dashboard">
                 <div className="dashboard-header">
                     <div className="portfolio-title-group">
@@ -143,6 +146,11 @@ return (
                     list={list} 
                 />
             </div>
+            ) : <div className="flex flex-column items-center text-center justify-center align-center h-96">
+                <h2 className="text-5xl">Start creating your<br></br> portfolio today!</h2>
+                <button onClick={openAddCoinSlide} className="mt-10 bg-sky-400 py-3 px-8 text-white hover:bg-sky-300 hover:cursor-pointer rounded-xl"> Get started </button>
+                </div>
+        }
         </div>
     </main>
 </>
