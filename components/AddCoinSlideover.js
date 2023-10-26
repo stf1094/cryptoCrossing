@@ -195,7 +195,7 @@ export default function AddCoinSlideover({showAddCoinSlide, setShowAddCoinSlide,
                        /*  onClick={() => closeAddCoinSlide()} */
                         onClick={() => clearSelection()}
                         >
-                        cancel
+                        clear selection
                     </button>
                     </div>
                   </div>
