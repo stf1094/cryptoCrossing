@@ -97,8 +97,6 @@ export default function AddCoinSlideover({showAddCoinSlide, setShowAddCoinSlide,
                         Add Coin
                       </Dialog.Title>
                     </div>
-
-
                     <div className="relative basis-10/12 px-3 sm:px-5 h-10/12 overflow-y-scroll mt-3 ml-3">
                     <div className="flex flex-column overflow-y-scroll">
                       <RadioGroup value={selected} onChange={setSelected}>
