@@ -1,5 +1,5 @@
 import { db, auth } from "../../firebaseConfig";
-import { collection, getDocs, updateDoc, addDoc, doc, deleteDoc } from 'firebase/firestore';
+import { collection, getDocs, updateDoc, addDoc, doc, deleteDoc, query, orderBy } from 'firebase/firestore';
 import { toast } from 'react-toastify';
 
 export const addACoin = (coin, portfolio) => async dispatch => {
@@ -8,8 +8,8 @@ export const addACoin = (coin, portfolio) => async dispatch => {
     let coinMatchToUpdateId;
     let coinMatchCurrentAmount;
     const coinsColl = collection(db, 'profiles', auth.currentUser.uid, 'coins');
-    console.log(coin);
-    console.log(portfolio);
+    // console.log(coin);
+    // console.log(portfolio);
     try {
        await portfolio.forEach((item) => {
             if (item.coinId === coin.coinId) {
@@ -74,7 +74,8 @@ export const deleteACoin = (id, amount, name) => dispatch => {
 // fetch portfolio
 export const fetchPortfolio = (userId) => dispatch => {
     const coinsColl = collection(db, 'profiles', userId, 'coins');
-    getDocs(coinsColl)
+    const q = query(coinsColl, orderBy("value", "desc"));
+    getDocs(q)
        .then((snapshot) => {
            //set portfolio to dom
             dispatch({type: "fetchPortfolioSuccess", payload: snapshot.docs.map(doc => ({id: doc.id, ...doc.data()}))})

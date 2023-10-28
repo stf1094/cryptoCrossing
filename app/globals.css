@@ -266,7 +266,16 @@ img {
   opacity: .85;
   font-size: .9rem
 }
-
+.percentage-bar {
+  height: 20px;
+  width: 100px;
+  background-color:rgb(25, 116, 151);
+  border-radius: 3px;
+}
+.percentage-bar-inner {
+  height: 100%;
+  
+}
 /* Utilities */
 /* .container {
   margin-top: 4rem; 
@@ -922,6 +931,13 @@ font-size: 20px;
 border-radius: 5px;
 border: 1px solid black;
 }
+.input-search {
+  padding: 10px;
+  margin: .75em 0em;
+  font-size: 20px;
+  border-radius: 5px;
+  border: 1px solid black;
+  }
 .calc-button {
   color: white;
   background-color: rgb(10, 150, 64);

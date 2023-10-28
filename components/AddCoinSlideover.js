@@ -1,22 +1,38 @@
-import { Fragment, useState } from 'react'
+"use client";
+import { Fragment, useState, useEffect } from 'react';
 import { Dialog, Transition, RadioGroup } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { toast } from 'react-toastify';
+import { addACoin } from '@/store/actions/portfolioAction';
+import { useSelector, useDispatch } from 'react-redux';
 
-export default function AddCoinSlideover({showAddCoinSlide, setShowAddCoinSlide, coinsList, seeValue}) {
+export default function AddCoinSlideover({showAddCoinSlide, setShowAddCoinSlide, coinsList}) {
+    const {portfolio} = useSelector((state) => state.portfolio);
     const [inputValue, setInputValue] = useState('');
-    // const [selectValue, setSelectValue] = useState('');
+    const [searchName, setSearchName] = useState('');
     const [selected, setSelected] = useState(null);
     const [coinIndex, setIndex] = useState(0);
+    const [coins, setCoins] = useState(coinsList);
+    const dispatch = useDispatch();
+    
+    useEffect(() => {
+      console.log('inside setCoins on modal...');
+      console.log(coins);
+      setCoins(coinsList);
+    }, []);
 
     const closeAddCoinSlide = (event) => {
         setInputValue('');
+        setSearchName('');
+        setCoins(coinsList);
         setSelected(null);
         setShowAddCoinSlide(false);
     };
   
     const clearSelection = () => {
       setSelected(null);
+      setSearchName('');
+      setCoins(coinsList);
     }
 
   const handleChange = (event) => setInputValue(event.target.value);
@@ -27,19 +43,43 @@ export default function AddCoinSlideover({showAddCoinSlide, setShowAddCoinSlide,
         // const index = event.target.selectedIndex;
         setIndex(index);
   }
-    
+  const filter = (e) => {
+    const keyword = e.target.value;
+    if (keyword !== '') {
+      const results = coins.filter((coin) => {
+        return coin.name.toLowerCase().startsWith(keyword.toLowerCase());
+        // Use the toLowerCase() method to make it case-insensitive
+      });
+      setCoins(results);
+    } else {
+      setCoins(coinsList);
+      // If the text field is empty, show all users
+    }
+    setSearchName(keyword);
+  }
+
   const handleClick = () => {
      if (inputValue === '' || inputValue === null || inputValue === 0) {
       toast.error('Please enter a valid number in the amount field');
      } else {
-      console.log(selected);
-      console.log(coinIndex);
-       // addACoin(inputValue, modalCoinId);
-       // seeValue(inputValue, selectValue, coinIndex);
-       seeValue(inputValue, coinIndex);
-        //close modal
+      // console.log("coinIndex: ", coinIndex);
+      console.log("selected", selected);
+      const coin = {
+        amount: Number(inputValue),
+        name: selected.name,
+        coinId: selected.id,
+        currentPrice: selected.current_price,
+        value: inputValue * selected.current_price,
+        symbol: selected.symbol,
+        img: selected.image
+      }
+       dispatch(addACoin(coin, portfolio));
+
+        //close modal and reset all coin data
        setInputValue('');
        setShowAddCoinSlide(false);
+       setSearchName('');
+       setCoins(coinsList);
      }
   }
 
@@ -98,11 +138,20 @@ export default function AddCoinSlideover({showAddCoinSlide, setShowAddCoinSlide,
                       </Dialog.Title>
                     </div>
                     <div className="relative basis-10/12 px-3 sm:px-5 h-10/12 overflow-y-scroll mt-3 ml-3">
+                    <div className="my-2 flex flex-col">
+                       <input
+                         type="search"
+                         value={searchName}
+                         onChange={filter}
+                         className="input-search focus:ring-sky-400 active:ring-sky-200"
+                         placeholder="Search..."
+                       />
+                    </div>
                     <div className="flex flex-column overflow-y-scroll">
                       <RadioGroup value={selected} onChange={setSelected}>
                         <RadioGroup.Label className="sr-only">Coin List</RadioGroup.Label>
                         <div className="space-y-2">
-                            {coinsList && coinsList.map((item, index) => (
+                            {coins && coins.map((item, index) => (
                             <RadioGroup.Option
                                 key={item.id}
                                 onClick={() => setIndex(index)}
@@ -157,23 +206,6 @@ export default function AddCoinSlideover({showAddCoinSlide, setShowAddCoinSlide,
                             ))}
                         </div>
                         </RadioGroup>
-                           {/*  {coinsList && coinsList.map((item, index) => (
-                            <div id={index} onClick={() => handleSelectChange(item.id, index)} className="flex flex-row justify-between mx-2 py-4 px-1 border-b border-slate-400 hover:bg-sky-50 hover:cursor-pointer" key={item.id}>
-                                <div className="flex flex-row">
-                                  <img src={item.image} alt="coin-logo" className="h-8 w-8" />
-                                  <div className="coin-title-amount mt-1">
-                                    <span className="coin-title">{item.name}</span>
-                                  </div>
-                                  <span className="mt-1 ml-4 font-sm text-sm text-slate-400">{item.symbol.toUpperCase()}</span>
-                                </div>
-                                <div>${item.current_price}</div>
-                            </div>
-                            ))
-                            } */}
-                        
-                            {/*   <select className="select-coin mt-2 focus:ring-sky-300" value={selectValue} onChange={handleSelectChange}>
-                                { coinsList && coinsList.map(item => <option label={item.name} key={item.id}>{item.name}</option>) }  
-                            </select> */}
                         </div>
                     </div>
 

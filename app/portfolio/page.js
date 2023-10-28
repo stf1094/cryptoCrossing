@@ -2,9 +2,8 @@
 import React, {useEffect, useState, Suspense} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from "next/navigation";
-import { addACoin, fetchPortfolio, updatePrices } from '../../store/actions/portfolioAction';
+import { fetchPortfolio, updatePrices } from '../../store/actions/portfolioAction';
 // import { getCurrentProfile } from '../../store/actions/profileAction';
-import AddCoinModal from '../../components/AddCoinModal';
 import Results from '../../components/Results';
 import UpdateCoinModal from '../../components/UpdateCoinModal';
 import { ArrowPathRoundedSquareIcon, PlusCircleIcon } from '@heroicons/react/24/outline';
@@ -80,33 +79,6 @@ const Portfolio = () => {
     }
     }
 
-    const handleSeeValue = async (value, index) => {
-        console.log(value);
-        // console.log(select);
-        // console.log(index.id);
-        // console.log(coinOptions[index].id);
-        // const total = value * select;
-        const total = value * data[index].current_price;
-        const coinName = data[index].name;
-        const symbol = data[index].symbol;
-        const img = data[index].image;
-        const newPriceSub = {
-          coinTotal: total,
-          name: coinName,
-        }
-        const newCoin = {
-            amount: Number(value),
-            name: coinName,
-            coinId: data[index].id,
-        // currentPrice: select,
-            currentPrice: data[index].current_price,
-            value: value * data[index].current_price,
-            symbol: symbol,
-            img: img
-        }
-        setList([...list, newPriceSub]);
-        dispatch(addACoin(newCoin, portfolio));
-    }
 return (
   <>
     <header className="bg-white shadow">
@@ -122,8 +94,7 @@ return (
         <div className="mx-auto max-w-7xl py-6 xs:px-8 sm:px-6 lg:px-8"> 
             <Suspense fallback={<div>Loading...</div>}>
               <UpdateCoinModal showUpdateModal={showUpdateModal} setShowUpdateModal={setShowUpdateModal} coinOptions={data} modalCoinId={modalCoinId} modalCoin={modalCoin} modalAmount={modalAmount} />
-              <AddCoinModal showAddCoinModal={showAddCoinModal} setShowAddCoinModal={setShowAddCoinModal} coinsList={data} seeValue={handleSeeValue} />
-              <AddCoinSlideover showAddCoinSlide={showAddCoinSlide} setShowAddCoinSlide={setShowAddCoinSlide} coinsList={data} seeValue={handleSeeValue} />
+              <AddCoinSlideover showAddCoinSlide={showAddCoinSlide} setShowAddCoinSlide={setShowAddCoinSlide} coinsList={data} />
             </Suspense>
             {portfolio && portfolio.length > 0 ? (
 
@@ -138,12 +109,12 @@ return (
                 </div>
                 <Results 
                     openUpdateModal={openUpdateModal} 
-                    openAddCoinModal={openAddCoinModal} 
+                    // openAddCoinModal={openAddCoinModal} 
                     setModalAmount={setModalAmount} 
                     setModalCoinId={setModalCoinId} 
                     setModalCoin={setModalCoin} 
                     overallTotal={total} 
-                    list={list} 
+                    //list={list} 
                 />
             </div>
             ) : <div className="flex flex-column items-center text-center justify-center align-center h-96">
