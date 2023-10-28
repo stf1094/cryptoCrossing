@@ -973,6 +973,31 @@ border: 1px solid black;
   fill:  #131a35;
 }
 
+.animate-bar {
+  border-radius: 5px;
+  background-color: #afafaf;
+  opacity: 0.5;
+  height: 100%;
+  position: relative;
+  left: 0;
+  animation: 2s in-out forwards;
+  text-align: right;
+  /* transition: width 1s; */
+}
+
+@keyframes in-out {
+  0% {
+    width: 0%;
+  }
+  45%,55% {
+   width: 70%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+
 @media (max-width: 1128px) {
    .landing-card-group {
      grid-template-columns: 1fr;

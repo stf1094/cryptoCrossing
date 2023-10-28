@@ -4,6 +4,7 @@ import { deleteACoin } from '../store/actions/portfolioAction';
 import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline';
 import DeleteCoinModal from './DeleteCoinModal';
 import PercentageBar from './PercentageBar';
+import PercentageBarLoading from './PercentageBarLoading';
 
 function Results({setModalAmount, setModalCoin, setModalCoinId, openUpdateModal, overallTotal}) {
   const {portfolio, total} = useSelector((state) => state.portfolio);
@@ -66,7 +67,7 @@ function Results({setModalAmount, setModalCoin, setModalCoinId, openUpdateModal,
                 </div>
                 <div className="xs:basis-4/12 sm:text-left">
                   <span className="coin-total-amount">${item.value.toFixed(2)}</span>
-                  <PercentageBar bgColor='orange' percent={Number(item.value / total * 100).toFixed(1)} />
+                  {item && Number(item.value / total * 100).toFixed(1) <= 100 ? <PercentageBar bgColor='orange' percent={Number(item.value / total * 100).toFixed(1)} /> : <PercentageBarLoading />}
                 </div>
                 <div className="button-group mt-q flex flex-row">
                   <PencilSquareIcon className="xs:h-6 xs:w-6 sm:h-8 sm:w-8 mr-3 hover:cursor-pointer hover:text-sky-400" aria-hidden="true" onClick={() => handleUpdateClick(item.amount, item.name, item.id)} />
