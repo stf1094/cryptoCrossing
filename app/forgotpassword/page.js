@@ -2,12 +2,17 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useDispatch } from "react-redux";
+import { passwordResetEmail } from '../../store/actions/authAction';
+import { useRouter } from 'next/navigation';
+
+// import { redirect } from "next/dist/server/api-utils";
 // import { Redirect } from "react-router-dom";
 // import {setAlert} from '../../actions/alertAction';
 // import {  } from '../../actions/authAction';
 
 function ForgotPassword() {
   const dispatch = useDispatch();
+  const router = useRouter();
   const [formData, setFormData] = useState({
     email: ''
   });
@@ -19,8 +24,9 @@ const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value
 const onSubmit = e => {
     e.preventDefault();
     console.log('clicked: ' + email);
-    dispatch()
-   // setAlert('We sent you and email to reset your password', 'warning');
+    dispatch(passwordResetEmail(email));
+    setFormData('');
+    router.push('/login');
 }
 
      // redirect if logged in

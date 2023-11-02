@@ -179,7 +179,7 @@ export const logout = () => async dispatch => {
   }
 
 //Password reset email -- if user can't login
-export const passwordResetEmail = (email) => {
+export const passwordResetEmail = (email) => async dispatch => {
     console.log(email);
     sendPasswordResetEmail(auth, email)
     .then(() => {

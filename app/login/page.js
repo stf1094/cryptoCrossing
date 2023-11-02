@@ -44,7 +44,7 @@ useEffect(() => {
       <div className="bg-sky-500 h-screen xxs:hidden xl:block"></div>
      
       <div className="sign-in-container flex flex-column mx-auto my-auto h-screen w-screen sm:justify-center xs:mt-14 xs:px-8 sm:-mt-10 xl:col-span-2">
-        <Image src={logo} alt="crypto-logo" className="w-44 mb-12"></Image>
+        <Image src={logo} alt="crypto-logo" className="w-44 mb-12 cursor-pointer" onClick={() => router.push('/')}></Image>
         <h1 className="large text-black font-bold">Log In</h1>
         <p className="lead"><i className="fas fa-user"></i> Sign into your Account</p>
           <form className="form" onSubmit={e => onSubmit(e)}>
