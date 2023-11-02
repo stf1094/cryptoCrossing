@@ -54,7 +54,7 @@ function Market() {
                     <div className="flex flex-row mb-5 xs:px-4 md:px-0">
                       {hot30 && hot30.length > 0 ? <TrendingSlider hot7={hot30} /> : <div>no data yet</div> } 
                     </div>
-                    <h3 className="text-lg font-bold mb-2 xs:px-4 md:px-0">Top 100</h3>
+                    <h3 className="text-lg font-bold mb-2 xs:px-4 md:px-0">Top 200</h3>
                     <Suspense fallback={<div>Loading...</div>}>
                        {market && market.length > 0 ? <PriceTable coins={market} /> : <div>no data yet</div>}
                     </Suspense> 
