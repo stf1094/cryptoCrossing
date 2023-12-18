@@ -48,15 +48,7 @@ const Portfolio = () => {
     const openAddCoinSlide = () => {
         setShowAddCoinSlide(prev => !prev);
         console.log('clicked');
-  }
- /*    React.useEffect(() => {
-        fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false', config)
-            .then((res) => res.json()) 
-            .then((data) => {
-                setCoinOptions(data);
-            })
-    }, []); */
-    // console.log(data);
+    }
     useEffect(() => {
         if (!isAuthenticated) {
           console.log("user not authenticated to view this page...");
@@ -117,10 +109,16 @@ return (
                     //list={list} 
                 />
             </div>
-            ) : <div className="flex flex-column items-center text-center justify-center align-center h-96">
-                <h2 className="text-5xl">Start creating your<br></br> portfolio today!</h2>
-                <button onClick={openAddCoinSlide} className="mt-10 bg-sky-400 py-3 px-8 text-white hover:bg-sky-300 hover:cursor-pointer rounded-xl"> Get started </button>
+            ) : (
+                <div className="flex flex-column items-center text-center justify-center align-center h-96">
+                  <h2 className="text-5xl">Start creating your<br></br> portfolio today!</h2>
+                  <button onClick={openAddCoinSlide} className="mt-10 bg-sky-400 py-3 px-8 text-white hover:bg-sky-300 hover:cursor-pointer rounded-xl"> Get started </button>
                 </div>
+            ) /* : (
+              <div className="flex flex-column items-center text-center justify-center align-center h-96">
+                 <div>loading...</div>
+              </div>
+            ) */
         }
         </div>
     </main>
