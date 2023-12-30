@@ -18,7 +18,7 @@ const options = {
     },
 }
 const fetcher = (url) => fetch(url, options).then((res) => res.json());
-const API = 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=200&page=1&sparkline=false';
+const API = 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=1&sparkline=false';
 
 const Portfolio = () => {
     const router = useRouter();
