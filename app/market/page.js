@@ -1,7 +1,7 @@
 "use client";
-import React, {Suspense, useEffect} from 'react';
+import React, {Suspense, useEffect, useState} from 'react';
 import PriceTable from '../../components/PriceTable';
-import { getHotColdCoins, getMarket } from '@/store/actions/portfolioAction';
+import { getHotColdCoins, getMarket, updateMarketPage } from '@/store/actions/portfolioAction';
 import { useDispatch, useSelector } from 'react-redux';
 import { ArrowTrendingUpIcon, ArrowTrendingDownIcon } from '@heroicons/react/24/solid';
 import TrendingSlider from '@/components/TrendingSlider';
@@ -19,6 +19,7 @@ import TrendingSlider from '@/components/TrendingSlider';
 function Market() {
   // const { data, error } = useSWR(API, fetcher);
   const {market, hot7, hot30, cold7, cold30} = useSelector((state) => state.market);
+  const [page, setPage] = useState(1);
   // const router = useRouter();
   const dispatch = useDispatch();
   // const [coins, setCoins] = useState([]);
@@ -26,18 +27,39 @@ function Market() {
   // if (data) console.log(data[0].price_change_percentage_30d_in_currency.toFixed(2));
   // const market = getMarketData();
   // const [coins] = await Promise.all([market]);
+  // console.log(market);
 
   useEffect(() => {
-    dispatch(getHotColdCoins());
-  }, []);
+    dispatch(getMarket(page));
+  }, [page]);
+
+  const onPageClick = (p) => {
+    // console.log('page', page);
+    // dispatch(getMarket(page));
+    // dispatch(updateMarketPage(page));
+    setPage(p);
+  }
+  /* useEffect(() => {
+    console.log("inside useEffect for changes in market page")
+    dispatch(getHotColdCoins(marketPage));
+    dispatch(getMarket(marketPage));
+  }, [marketPage]); */
+
   useEffect(() => {
-    dispatch(getMarket());
+    console.log("inside market page for inside getHotColdCoins");
+    dispatch(getHotColdCoins(1));
   }, []);
+
+ /*  useEffect(() => {
+    console.log("inside market page for inside getMarket");
+    dispatch(getMarket(marketPage));
+  }, []); */
 /* 
     // console.log('after try catch data fetch');
   }, []); */
+
   // console.log("Is data ready?", !!data);
-  console.log(hot30);
+  // console.log(hot30);
     return (
             <>
                <header className="bg-white shadow">
@@ -54,7 +76,12 @@ function Market() {
                     <div className="flex flex-row mb-5 xs:px-4 md:px-0">
                       {hot30 && hot30.length > 0 ? <TrendingSlider hot7={hot30} /> : <div>no data yet</div> } 
                     </div>
-                    <h3 className="text-lg font-bold mb-2 xs:px-4 md:px-0">Top 250</h3>
+                    <div className="flex flex-row">
+                      <h3 className="text-lg font-bold mb-2 xs:px-4 md:px-0 mr-5">Top 250</h3>
+                      <h4 className="mr-2 cursor-pointer" onClick={() => onPageClick(1)}>1-250</h4>
+                      <h4 className="mx-2 cursor-pointer" onClick={() => onPageClick(2)}>251-500</h4>
+                      <h4 className="mx-2 cursor-pointer" onClick={() => onPageClick(3)}>501-750</h4>
+                    </div>
                     <Suspense fallback={<div>Loading...</div>}>
                        {market && market.length > 0 ? <PriceTable coins={market} /> : <div>no data yet</div>}
                     </Suspense> 

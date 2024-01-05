@@ -144,8 +144,14 @@ export const updatePortfolioItem = (newAmount, id, name, currentPrice) => async 
         toast.error(`Could not update ${name}. Please try again.`);
     }
 }
-export const getMarket = () => async dispatch => {
-    console.log('getMarket()');
+
+export const updateMarketPage = (page) => async dispatch => {
+    await dispatch({type: "updateMarketPage", payload: page});
+    // await dispatch(getMarket(page));
+}
+
+export const getMarket = (page) => async dispatch => {
+    console.log('getMarket()', page);
     let market = [];
     const config = {
         headers: {
@@ -153,7 +159,7 @@ export const getMarket = () => async dispatch => {
         }
       }
       try {
-        const res = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=300&page=1&sparkline=false&price_change_percentage=24h%2C7d%2C30d&locale=en&precision=2')
+        const res = await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=${page}&sparkline=false&price_change_percentage=24h%2C7d%2C30d&locale=en&precision=2`)
         .then((res) => res.json())
         .then((data) => {
             data.forEach((item) => {
@@ -163,19 +169,20 @@ export const getMarket = () => async dispatch => {
                     image: item.image,
                     rank: item.market_cap_rank, 
                     price: item.current_price,
-                    change7: Number(item.price_change_percentage_7d_in_currency), 
+                    change7: item.price_change_percentage_7d_in_currency ? Number(item.price_change_percentage_7d_in_currency) : 0.000, 
                     change30: item.price_change_percentage_30d_in_currency ? Number(item.price_change_percentage_30d_in_currency) : 0.000,
-                    change: item.price_change_percentage_24h_in_currency
+                    change: item.price_change_percentage_24h_in_currency ? item.price_change_percentage_24h_in_currency : 0.000
                 })
             })
         });
-       await dispatch({type: "getMarketSuccess", payload: market})
+        // await dispatch({type: "updateMarketPage", payload: page});
+        await dispatch({type: "getMarketSuccess", payload: market});
     } catch (err) {
         console.log(err.message);
     }
 }
 
-export const getHotColdCoins = () => async dispatch => {
+export const getHotColdCoins = (page) => async dispatch => {
     const hot7 = [];
     const cold7 = [];
     const hot30 = [];
@@ -185,7 +192,7 @@ export const getHotColdCoins = () => async dispatch => {
             'Access-Control-Allow-Origin': 'https://api.coingecko.com/api/v3',
         }
       }
-    const res = fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=300&page=1&sparkline=false&price_change_percentage=24h%2C7d%2C30d&locale=en&precision=2')
+    const res = fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=${page}&sparkline=false&price_change_percentage=24h%2C7d%2C30d&locale=en&precision=2`)
     .then((res) => res.json()) 
     .then((data) => {
         data.forEach((item) => {
