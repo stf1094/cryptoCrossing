@@ -61,12 +61,12 @@ const Portfolio = () => {
           dispatch(fetchPortfolio(user.uid));
           dispatch(updatePrices(data, user.uid));
         }
-        console.log('hey from inside fetchPOrtfolio/update prices inside Dash');
+        // console.log('hey from inside fetchPOrtfolio/update prices inside Dash');
     }, []); 
 
     const onUpdatePrices = () => {
         if (user && isAuthenticated && data) {
-        console.log('on update prices');
+        // console.log('on update prices');
         dispatch(updatePrices(data, user.uid));
     }
     }
