@@ -75,6 +75,7 @@ export const deleteACoin = (id, amount, name) => dispatch => {
 export const fetchPortfolio = (userId) => dispatch => {
     const coinsColl = collection(db, 'profiles', userId, 'coins');
     const q = query(coinsColl, orderBy("value", "desc"));
+    console.log("fetching portfolio...");
     getDocs(q)
        .then((snapshot) => {
            //set portfolio to dom
@@ -92,7 +93,7 @@ export const fetchPortfolio = (userId) => dispatch => {
 
 //updateTotal
 export const updateTotal = (portfolio, callback) => dispatch => {
-       console.log(portfolio);
+       // console.log(portfolio);
       let finaltotal;
       portfolio.forEach(function(coin) {
         finaltotal = callback(coin.coinId, coin.value);
@@ -150,16 +151,17 @@ export const updateMarketPage = (page) => async dispatch => {
     // await dispatch(getMarket(page));
 }
 
-export const getMarket = (page) => async dispatch => {
-    console.log('getMarket()', page);
+export const getMarket = () => async dispatch => {
+    console.log('getMarket()');
     let market = [];
+    let market2 = [];
     const config = {
         headers: {
             'Access-Control-Allow-Origin': 'https://api.coingecko.com/api/v3',
         }
       }
       try {
-        const res = await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=${page}&sparkline=false&price_change_percentage=24h%2C7d%2C30d&locale=en&precision=2`)
+        const res = await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=1&sparkline=false&price_change_percentage=24h%2C7d%2C30d&locale=en&precision=2`)
         .then((res) => res.json())
         .then((data) => {
             data.forEach((item) => {
@@ -180,6 +182,29 @@ export const getMarket = (page) => async dispatch => {
     } catch (err) {
         console.log(err.message);
     }
+    try {
+        const res = await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=2&sparkline=false&price_change_percentage=24h%2C7d%2C30d&locale=en&precision=2`)
+        .then((res) => res.json())
+        .then((data) => {
+            data.forEach((item) => {
+                market2.push({
+                    id: item.id, 
+                    name: item.name, 
+                    image: item.image,
+                    rank: item.market_cap_rank, 
+                    price: item.current_price,
+                    change7: item.price_change_percentage_7d_in_currency ? Number(item.price_change_percentage_7d_in_currency) : 0.000, 
+                    change30: item.price_change_percentage_30d_in_currency ? Number(item.price_change_percentage_30d_in_currency) : 0.000,
+                    change: item.price_change_percentage_24h_in_currency ? item.price_change_percentage_24h_in_currency : 0.000
+                })
+            })
+        });
+        // await dispatch({type: "updateMarketPage", payload: page});
+        await dispatch({type: "getMarket2Success", payload: market2});
+    } catch (err) {
+        console.log(err.message);
+    }
+    
 }
 
 export const getHotColdCoins = (page) => async dispatch => {

@@ -2,6 +2,7 @@ import { createReducer } from '@reduxjs/toolkit';
 const initialState = {
     loading: false,
     market: null,
+    market2: null,
     marketPage: 1,
     hot7: null,
     hot30: null,
@@ -31,6 +32,11 @@ export const marketReducer = createReducer(initialState, (builder) => {
   builder.addCase("getMarketSuccess", (state, action) => {
     state.loading = false;
     state.market = action.payload;
+    state.error = {};
+  });
+  builder.addCase("getMarket2Success", (state, action) => {
+    state.loading = false;
+    state.market2 = action.payload;
     state.error = {};
   });
   builder.addCase("updateMarketPage", (state, action) => {

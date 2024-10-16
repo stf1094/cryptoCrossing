@@ -14,7 +14,8 @@ import AddCoinSlideover from '@/components/AddCoinSlideover';
 const options = {
     method: "GET",
     headers: {
-        'Access-Control-Allow-Origin': 'https://api.coingecko.com/api/v3',
+        'Access-Control-Allow-Origin': '*',
+        // 'x-cg-demo-api-key': process.env.NEXT_PUBLIC_CG_API
     },
 }
 const fetcher = (url) => fetch(url, options).then((res) => res.json());
@@ -34,7 +35,6 @@ const Portfolio = () => {
     const {portfolio, total} = useSelector((state) => state.portfolio);
     const { user, isAuthenticated } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
-
     const openUpdateModal = () => {
         setShowUpdateModal(prev => !prev);
        // setModalAmount(amount);
@@ -43,11 +43,11 @@ const Portfolio = () => {
   
     const openAddCoinModal = () => {
           setShowAddCoinModal(prev => !prev);
-          console.log('clicked');
+         // console.log('clicked');
     }
     const openAddCoinSlide = () => {
         setShowAddCoinSlide(prev => !prev);
-        console.log('clicked');
+       // console.log('clicked');
     }
     useEffect(() => {
         if (!isAuthenticated) {

@@ -18,8 +18,9 @@ import TrendingSlider from '@/components/TrendingSlider';
 
 function Market() {
   // const { data, error } = useSWR(API, fetcher);
-  const {market, hot7, hot30, cold7, cold30} = useSelector((state) => state.market);
+  const {market, market2, hot7, hot30, cold7, cold30} = useSelector((state) => state.market);
   const [page, setPage] = useState(1);
+  const [marketList, setMarketList] = useState(market);
   // const router = useRouter();
   const dispatch = useDispatch();
   // const [coins, setCoins] = useState([]);
@@ -30,14 +31,17 @@ function Market() {
   // console.log(market);
 
   useEffect(() => {
-    dispatch(getMarket(page));
-  }, [page]);
+    dispatch(getMarket());
+  }, [marketList]); 
 
   const onPageClick = (p) => {
-    // console.log('page', page);
+    console.log('page', p);
+    console.log(marketList);
     // dispatch(getMarket(page));
     // dispatch(updateMarketPage(page));
-    setPage(p);
+    // setPage(p);
+    setMarketList(market2);
+    console.log(marketList);
   }
   /* useEffect(() => {
     console.log("inside useEffect for changes in market page")
@@ -50,10 +54,10 @@ function Market() {
     dispatch(getHotColdCoins(1));
   }, []);
 
- /*  useEffect(() => {
+ /*   useEffect(() => {
     console.log("inside market page for inside getMarket");
-    dispatch(getMarket(marketPage));
-  }, []); */
+    dispatch(getMarket());
+  }, []);  */
 /* 
     // console.log('after try catch data fetch');
   }, []); */
@@ -80,10 +84,10 @@ function Market() {
                       <h3 className="text-lg font-bold mb-2 xs:px-4 md:px-0 mr-5">Top 250</h3>
                       <h4 className="mr-2 cursor-pointer" onClick={() => onPageClick(1)}>1-250</h4>
                       <h4 className="mx-2 cursor-pointer" onClick={() => onPageClick(2)}>251-500</h4>
-                      <h4 className="mx-2 cursor-pointer" onClick={() => onPageClick(3)}>501-750</h4>
+                      {/* <h4 className="mx-2 cursor-pointer" onClick={() => onPageClick(3)}>501-750</h4> */}
                     </div>
                     <Suspense fallback={<div>Loading...</div>}>
-                       {market && market.length > 0 ? <PriceTable coins={market} /> : <div>no data yet</div>}
+                       {marketList && marketList.length > 0 ? <PriceTable coins={marketList} /> : <div>no data yet</div>}
                     </Suspense> 
                  </div>
                </main>
