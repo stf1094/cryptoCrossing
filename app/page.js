@@ -48,23 +48,23 @@ export default function Home() {
   }, [isAuthenticated, loading, router]);
 
   // Fetch market data and home coins once on mount
-  useEffect(() => {
-    // Fetch general market data for Redux
-    dispatch(getMarket());
+  // useEffect(() => {
+  //   // Fetch general market data for Redux
+  //   dispatch(getMarket());
 
-    // Fetch specific coins for home page display
-    setCoinsLoading(true);
-    fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin%2C%20ethereum%2C%20dogecoin%2C%20ripple%2C%20litecoin%2C%20cardano%2C%20solana%2C%20polkadot%2C%20matic-network%2C%20binancecoin&order=market_cap_desc&sparkline=false&price_change_percentage=24h%2C7d%2C30d&locale=en&precision=2', config)
-      .then((res) => res.json())
-      .then((data) => {
-        setHomeCoins(data);
-        setCoinsLoading(false);
-      })
-      .catch((error) => {
-        console.error('Error fetching home coins:', error);
-        setCoinsLoading(false);
-      });
-  }, [dispatch]);
+  //   // Fetch specific coins for home page display
+  //   setCoinsLoading(true);
+  //   fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin%2C%20ethereum%2C%20dogecoin%2C%20ripple%2C%20litecoin%2C%20cardano%2C%20solana%2C%20polkadot%2C%20matic-network%2C%20binancecoin&order=market_cap_desc&sparkline=false&price_change_percentage=24h%2C7d%2C30d&locale=en&precision=2', config)
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       setHomeCoins(data);
+  //       setCoinsLoading(false);
+  //     })
+  //     .catch((error) => {
+  //       console.error('Error fetching home coins:', error);
+  //       setCoinsLoading(false);
+  //     });
+  // }, [dispatch]);
 
   const handleLoginAnon = async () => {
     await dispatch(loginAnon());
