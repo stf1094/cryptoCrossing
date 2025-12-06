@@ -4,7 +4,7 @@ import Link from 'next/link';
 import logo from '../assets/crypto-crossing-logo.png';
 import logoWhite from '../assets/crypto-crossing-logo-white.png';
 import iconLogo from '../assets/crypto-crossing-icon.png';
-import { useState, Suspense, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useRouter } from "next/navigation";
 import { Dialog } from '@headlessui/react';
@@ -14,19 +14,12 @@ import { faBarChart, faChartLine, faNewspaper, faCoins } from '@fortawesome/free
 import HomePriceTable from '@/components/HomePriceTable';
 import { setUser, loginAnon } from '@/store/actions/authAction';
 import { getMarket } from '@/store/actions/portfolioAction';
-import Loading from '@/components/Loading';
 
 const config = {
   headers: {
       'Access-Control-Allow-Origin': 'https://api.coingecko.com/api/',
   }
 }
-
-//switch to a use effect within Home component to see how the get request works that way
-/* async function getMarketData() {
-  const res = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1&sparkline=false&price_change_percentage=24h%2C7d%2C30d&locale=en&precision=2', config)
-  return res.json()
-} */
 
 const navigation = [
   { name: 'Home', href: '/' },
@@ -39,43 +32,46 @@ export default function Home() {
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [homeCoins, setHomeCoins] = useState([]);
-  // const [homeLoading, setHomeLoading] = useState(false);
+  const [coinsLoading, setCoinsLoading] = useState(true);
   const dispatch = useDispatch();
-  // const market = getMarketData();
-  // const [coins] = await Promise.all([market]);
+
+  // Check authentication status on mount
   useEffect(() => {
     dispatch(setUser());
-  }, []);
+  }, [dispatch]);
 
+  // Redirect to portfolio if user is authenticated
   useEffect(() => {
-    console.log("inside useeffect for get market");
-    dispatch(getMarket());
-  }, []);
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      // console.log("user not authenticated to view this page...");
+    if (isAuthenticated && !loading) {
       router.push('/portfolio');
     }
-  }, []);
+  }, [isAuthenticated, loading, router]);
 
+  // Fetch market data and home coins once on mount
   useEffect(() => {
-    console.log('before data fetch');
+    // Fetch general market data for Redux
+    dispatch(getMarket());
+
+    // Fetch specific coins for home page display
+    setCoinsLoading(true);
     fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin%2C%20ethereum%2C%20dogecoin%2C%20ripple%2C%20litecoin%2C%20cardano%2C%20solana%2C%20polkadot%2C%20matic-network%2C%20binancecoin&order=market_cap_desc&sparkline=false&price_change_percentage=24h%2C7d%2C30d&locale=en&precision=2', config)
-      .then((res) => res.json()) 
+      .then((res) => res.json())
       .then((data) => {
-       // console.log(data);
-       // setCoins(data);
         setHomeCoins(data);
-    })
-  }, []);
+        setCoinsLoading(false);
+      })
+      .catch((error) => {
+        console.error('Error fetching home coins:', error);
+        setCoinsLoading(false);
+      });
+  }, [dispatch]);
+
   const handleLoginAnon = async () => {
-    dispatch(loginAnon());
+    await dispatch(loginAnon());
     router.push('/portfolio');
-  }
+  };
   return (
     <>
-  
     <main>
     <header className="absolute inset-x-0 top-0 z-50">
        <nav className="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
@@ -180,23 +176,19 @@ export default function Home() {
           <path d="M0 187L16.7 183C33.3 179 66.7 171 100 161.3C133.3 151.7 166.7 140.3 200 144.5C233.3 148.7 266.7 168.3 300 172.3C333.3 176.3 366.7 164.7 400 156.7C433.3 148.7 466.7 144.3 500 147.8C533.3 151.3 566.7 162.7 600 169.8C633.3 177 666.7 180 700 182.5C733.3 185 766.7 187 800 184.3C833.3 181.7 866.7 174.3 883.3 170.7L900 167L900 214L883.3 214C866.7 214 833.3 214 800 214C766.7 214 733.3 214 700 214C666.7 214 633.3 214 600 214C566.7 214 533.3 214 500 214C466.7 214 433.3 214 400 214C366.7 214 333.3 214 300 214C266.7 214 233.3 214 200 214C166.7 214 133.3 214 100 214C66.7 214 33.3 214 16.7 214L0 214Z" fill="#3b82f6"></path>
         </svg>
       </div>
-      <div className="w-screen bg-blue-500 flex flex-column items-center">
+      {/* <div className="w-screen bg-blue-500 flex flex-column items-center">
         <div className="container my-24 sm:px-4 md:px-2">
-      {/*     <div className="flex flex-row rounded-t-xl mx-auto max-w-5xl py-6 sm:px-6 lg:px-8 font-bold border-white">
-            <h5 className="xs:basis-1/12 pl-2">#</h5>
-            <h5 className="xs:basis-3/12 text-left">Coin</h5>
-            <h5 className="xs:basis-2/12 xs:text-right lg:text-left">Price</h5>
-            <h5 className="xs:basis-2/12 xs:text-right lg:text-left">24hr</h5>
-            <h5 className="xs:basis-2/12 xs:text-right lg:text-left">7d</h5>
-            <h5 className="xs:basis-2/12 xs:text-right lg:text-left">30d</h5>
-          </div> */}
           <div className="border-transparent rounded-xl mx-auto max-w-5xl pb-6 background-white shadow-2xl shadow-blue-900/80">
-            <Suspense fallback={<div>Loading...</div>}>
-               <HomePriceTable coins={homeCoins} />
-            </Suspense>
+            {coinsLoading ? (
+              <div className="text-center py-10 text-gray-500">Loading market data...</div>
+            ) : homeCoins && homeCoins.length > 0 ? (
+              <HomePriceTable coins={homeCoins} />
+            ) : (
+              <div className="text-center py-10 text-gray-500">Unable to load market data</div>
+            )}
           </div>
-        </div> 
-      </div>
+        </div>
+      </div> */}
       <div className="container my-24 text-left lg:px-12 xs:px-4">
           <div className="grid md:grid-cols-8 gap-x-9 gap-y-12 mb-10 xs:grid-cols-1">
               <div className="col-span-5 mb-9">
@@ -247,7 +239,6 @@ export default function Home() {
         <p className="mt-1 mb-10">Built with React, NextJS, Redux, Firebase, & Coin Gecko API.</p>
         </section>
     </main>
- 
     </>
   )
 }

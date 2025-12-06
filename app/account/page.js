@@ -12,10 +12,10 @@ function Account() {
         </div>
       </header>
       <main>
-      <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
-        <div>Account Page</div>
-        {user ? <div>{user.email}</div> : <div></div>}
-      </div>
+        <div className="mx-auto max-w-7xl py-6 xs:px-8 sm:px-6 lg:px-8">
+          <div>Account Page</div>
+          {user ? <div>{user.email}</div> : <div></div>}
+        </div>
      </main>
   </>
   )

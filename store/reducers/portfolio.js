@@ -16,6 +16,9 @@ import { createReducer } from '@reduxjs/toolkit';
     state.loading = false;
     state.portfolio = filteredPortfolio;
   });
+  builder.addCase("fetchPortfolioRequest", (state, action) => {
+    state.loading = true;
+  });
   builder.addCase("fetchPortfolioSuccess", (state, action) => {
     state.loading = false;
     state.portfolio = action.payload;

@@ -11,7 +11,15 @@ function PriceItem(props) {
              <span>{props.name}</span>
           </div>
             <div className="xs:basis-2/12 xs:text-right lg:text-left">
-                <span>${props.price}</span>
+                <span>${
+                  props.price > 1
+                  ? props.price.toFixed(2)
+                  : props.price < 1
+                  ? props.price.toFixed(3)
+                  : props.price < 0.001 
+                  ? props.price.toFixed(7)
+                  : props.price
+                }</span>
             </div>
             <div className="xs:basis-2/12 xs:text-right lg:text-left">
                <span className={props.change > 0 ? 'green' : 'red'}>{props.change} %</span>

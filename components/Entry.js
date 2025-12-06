@@ -1,24 +1,16 @@
-import React from 'react';
+import React, {Suspense} from 'react';
 import Navbar2 from './Navbar2';
-import { useDispatch, useSelector } from 'react-redux';
-import Home from '@/app/page';
+import { useSelector } from 'react-redux';
 
 function Entry({children}) {
-  const dispatch = useDispatch();
-  const {isAuthenticated, user, error, loading} = useSelector((state) => state.auth);
+  const {isAuthenticated} = useSelector((state) => state.auth);
 
   return (
     <>
-    {isAuthenticated ? 
-    <>
-    <Navbar2 />
-    {children}
-    </>
-    :
-    <>
-    {children}
-    </>
-    }
+      <Suspense fallback={<div>Loading...</div>}>
+        {isAuthenticated && <Navbar2 />}
+        {children}
+      </Suspense>
     </>
   )
 }

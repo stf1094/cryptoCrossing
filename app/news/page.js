@@ -11,23 +11,32 @@ import { Tab } from '@headlessui/react';
 function News() {
   const router = useRouter();
   const dispatch = useDispatch();
-  const {isAuthenticated} = useSelector((state) => state.auth);
-  const {btcNews, altsNews, news} = useSelector((state) => state.news);
+  const {isAuthenticated, loading: authLoading} = useSelector((state) => state.auth);
+  const {btcNews, altsNews, news, loading} = useSelector((state) => state.news);
+
   function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
   }
+
+  // Handle authentication redirect
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!isAuthenticated && !authLoading) {
       console.log("user not authenticated to view this page...");
       router.push('/login');
     }
-  }, []);
+  }, [isAuthenticated, authLoading, router]);
 
-    useEffect(() => {
-      dispatch(fetchNews());
-      dispatch(fetchBitcoinNews());
-      dispatch(fetchAltsNews());
-    }, []); 
+  // Fetch all news data once on mount
+  useEffect(() => {
+    dispatch(fetchNews());
+    dispatch(fetchBitcoinNews());
+    dispatch(fetchAltsNews());
+  }, [dispatch]);
+
+  // Determine if we're still loading any news data
+  const isLoading = loading || (!btcNews && !altsNews && !news);
+
+  if (!isAuthenticated) return null; // Early return while redirecting 
 
     return (
         <>
@@ -74,22 +83,39 @@ function News() {
                 'sm:rounded-xl bg-white p-3',
                 'ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2'
               )}>
-                <BtcNewsList btcNews={btcNews} /> 
-                
+                {isLoading ? (
+                  <div className="text-center py-10 text-gray-500">Loading Bitcoin news...</div>
+                ) : btcNews && btcNews.length > 0 ? (
+                  <BtcNewsList btcNews={btcNews} />
+                ) : (
+                  <div className="text-center py-10 text-gray-500">No Bitcoin news available</div>
+                )}
               </Tab.Panel>
               <Tab.Panel
               className={classNames(
                 'sm:rounded-xl bg-white p-3',
                 'ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2'
               )}>
-                <NewsList news={news} /> 
+                {isLoading ? (
+                  <div className="text-center py-10 text-gray-500">Loading general news...</div>
+                ) : news && news.length > 0 ? (
+                  <NewsList news={news} />
+                ) : (
+                  <div className="text-center py-10 text-gray-500">No general news available</div>
+                )}
               </Tab.Panel>
               <Tab.Panel
               className={classNames(
                 'sm:rounded-xl bg-white p-3',
                 'ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2'
               )}>
-                 <AltsNewsList altsNews={altsNews} /> 
+                {isLoading ? (
+                  <div className="text-center py-10 text-gray-500">Loading alt coin news...</div>
+                ) : altsNews && altsNews.length > 0 ? (
+                  <AltsNewsList altsNews={altsNews} />
+                ) : (
+                  <div className="text-center py-10 text-gray-500">No alt coin news available</div>
+                )}
               </Tab.Panel>
             </Tab.Panels>
           </Tab.Group>

@@ -16,10 +16,10 @@ export default function AddCoinSlideover({showAddCoinSlide, setShowAddCoinSlide,
     const dispatch = useDispatch();
     
     useEffect(() => {
-      console.log('inside setCoins on modal...');
-      console.log(coins);
-      setCoins(coinsList);
-    }, []);
+      if (coinsList && coinsList.length > 0) {
+        setCoins(coinsList);
+      }
+    }, [coinsList]);
 
     const closeAddCoinSlide = (event) => {
         setInputValue('');

@@ -1,98 +1,99 @@
 "use client";
-import React, {Suspense, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import PriceTable from '../../components/PriceTable';
-import { getHotColdCoins, getMarket, updateMarketPage } from '@/store/actions/portfolioAction';
+import { getHotColdCoins, getMarket } from '@/store/actions/portfolioAction';
 import { useDispatch, useSelector } from 'react-redux';
-import { ArrowTrendingUpIcon, ArrowTrendingDownIcon } from '@heroicons/react/24/solid';
+import { ArrowTrendingUpIcon } from '@heroicons/react/24/solid';
 import TrendingSlider from '@/components/TrendingSlider';
-// import useSWR from 'swr';
-
-/* const config = {
-  headers: {
-      'Access-Control-Allow-Origin': 'https://api.coingecko.com/api/v3'
-  }
-} */
-
-// const fetcher = (url) => fetch(url,  { headers: {'Access-Control-Allow-Origin': '*'} }).then((res) => res.json());
-// const API = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false&price_change_percentage=24h%2C7d%2C30d&locale=en&precision=2";
 
 function Market() {
-  // const { data, error } = useSWR(API, fetcher);
-  const {market, market2, hot7, hot30, cold7, cold30} = useSelector((state) => state.market);
-  const [page, setPage] = useState(1);
-  const [marketList, setMarketList] = useState(market);
-  // const router = useRouter();
+  const {market, market2, hot30, loading} = useSelector((state) => state.market);
+  const [currentPage, setCurrentPage] = useState(1);
   const dispatch = useDispatch();
-  // const [coins, setCoins] = useState([]);
-  // if (error) console.log(error);
-  // if (data) console.log(data[0].price_change_percentage_30d_in_currency.toFixed(2));
-  // const market = getMarketData();
-  // const [coins] = await Promise.all([market]);
-  // console.log(market);
 
+  // Fetch market data once on mount
   useEffect(() => {
     dispatch(getMarket());
-  }, [marketList]); 
-
-  const onPageClick = (p) => {
-    console.log('page', p);
-    console.log(marketList);
-    // dispatch(getMarket(page));
-    // dispatch(updateMarketPage(page));
-    // setPage(p);
-    setMarketList(market2);
-    console.log(marketList);
-  }
-  /* useEffect(() => {
-    console.log("inside useEffect for changes in market page")
-    dispatch(getHotColdCoins(marketPage));
-    dispatch(getMarket(marketPage));
-  }, [marketPage]); */
-
-  useEffect(() => {
-    console.log("inside market page for inside getHotColdCoins");
     dispatch(getHotColdCoins(1));
-  }, []);
+  }, [dispatch]);
 
- /*   useEffect(() => {
-    console.log("inside market page for inside getMarket");
-    dispatch(getMarket());
-  }, []);  */
-/* 
-    // console.log('after try catch data fetch');
-  }, []); */
+  // Log market data for debugging
+  useEffect(() => {
+    console.log('Market data:', {
+      market: market?.length,
+      market2: market2?.length,
+      currentPage
+    });
+  }, [market, market2, currentPage]);
 
-  // console.log("Is data ready?", !!data);
-  // console.log(hot30);
-    return (
-            <>
-               <header className="bg-white shadow">
-                 <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-                   <h1 className="text-3xl font-bold tracking-tight text-gray-900">Market</h1>
-                 </div>
-               </header>
-               <main>
-                 <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
-                    <div className="flex flex-row xs:px-4 md:px-0 mb-2">
-                       <h3 className="text-lg font-bold">Trending Up</h3>
-                       <ArrowTrendingUpIcon className="h-10 w-10 inline-block -mt-2 ml-2" />
-                    </div>
-                    <div className="flex flex-row mb-5 xs:px-4 md:px-0">
-                      {hot30 && hot30.length > 0 ? <TrendingSlider hot7={hot30} /> : <div>no data yet</div> } 
-                    </div>
-                    <div className="flex flex-row">
-                      <h3 className="text-lg font-bold mb-2 xs:px-4 md:px-0 mr-5">Top 250</h3>
-                      <h4 className="mr-2 cursor-pointer" onClick={() => onPageClick(1)}>1-250</h4>
-                      <h4 className="mx-2 cursor-pointer" onClick={() => onPageClick(2)}>251-500</h4>
-                      {/* <h4 className="mx-2 cursor-pointer" onClick={() => onPageClick(3)}>501-750</h4> */}
-                    </div>
-                    <Suspense fallback={<div>Loading...</div>}>
-                       {marketList && marketList.length > 0 ? <PriceTable coins={marketList} /> : <div>no data yet</div>}
-                    </Suspense> 
-                 </div>
-               </main>
-             </>
-    )
+  // Determine which market data to display based on current page
+  const displayedMarket = currentPage === 1 ? market : market2;
+
+  const onPageClick = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+  const isLoading = loading || (!market && !market2);
+
+  return (
+    <>
+      <header className="bg-white shadow">
+        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+          <h1 className="text-3xl font-bold tracking-tight text-gray-900">Market</h1>
+        </div>
+      </header>
+      <main>
+        <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+          {/* Trending Section */}
+          <div className="flex flex-row xs:px-4 md:px-0 mb-2">
+            <h3 className="text-lg font-bold">Trending Up</h3>
+            <ArrowTrendingUpIcon className="h-10 w-10 inline-block -mt-2 ml-2" />
+          </div>
+          <div className="flex flex-row mb-5 xs:px-4 md:px-0">
+            {isLoading ? (
+              <div className="text-gray-500">Loading trending coins...</div>
+            ) : hot30 && hot30.length > 0 ? (
+              <TrendingSlider hot7={hot30} />
+            ) : (
+              <div className="text-gray-500">No trending data available</div>
+            )}
+          </div>
+
+          {/* Market Table Section */}
+          <div className="flex flex-row items-center mb-3">
+            <h3 className="text-lg font-bold mb-2 xs:px-4 md:px-0 mr-5">Top 500</h3>
+            <button
+              className={`mr-2 px-3 py-1 rounded ${
+                currentPage === 1
+                  ? 'bg-sky-400 text-white'
+                  : 'bg-gray-200 hover:bg-gray-300'
+              }`}
+              onClick={() => onPageClick(1)}
+            >
+              1-250
+            </button>
+            <button
+              className={`mx-2 px-3 py-1 rounded ${
+                currentPage === 2
+                  ? 'bg-sky-400 text-white'
+                  : 'bg-gray-200 hover:bg-gray-300'
+              }`}
+              onClick={() => onPageClick(2)}
+            >
+              251-500
+            </button>
+          </div>
+
+          {isLoading ? (
+            <div className="text-gray-500 text-center py-10">Loading market data...</div>
+          ) : displayedMarket && displayedMarket.length > 0 ? (
+            <PriceTable coins={displayedMarket} />
+          ) : (
+            <div className="text-gray-500 text-center py-10">No market data available</div>
+          )}
+        </div>
+      </main>
+    </>
+  );
 }
 
 export default Market;

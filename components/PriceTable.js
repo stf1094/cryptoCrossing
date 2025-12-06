@@ -1,5 +1,5 @@
 "use client";
-import React from 'react';
+import React, { useEffect } from 'react';
 import PriceItem from './PriceItem';
 import { useState } from 'react';
 import { ArrowLongDownIcon, ArrowLongUpIcon } from '@heroicons/react/24/solid';
@@ -9,8 +9,11 @@ function PriceTable(props) {
   const [sortField, setSortField] = useState("market_cap");
   const [sortOrder, setSortOrder] = useState("asc");
   const data = props.coins;
-  // console.log("table data", tableData);
-   // setTableData(props.coins);
+
+  // Update tableData when props.coins changes (e.g., switching pages)
+  useEffect(() => {
+    setTableData(props.coins);
+  }, [props.coins]);
    
    const handleSort = (field) => {
       const newdata = [...data].sort((a, b) => 

@@ -72,10 +72,11 @@ export const deleteACoin = (id, amount, name) => dispatch => {
 }
 
 // fetch portfolio
-export const fetchPortfolio = (userId) => dispatch => {
+export const fetchPortfolio = (userId, setLoading) => dispatch => {
     const coinsColl = collection(db, 'profiles', userId, 'coins');
     const q = query(coinsColl, orderBy("value", "desc"));
     console.log("fetching portfolio...");
+    setLoading && dispatch({type: "fetchPortfolioRequest"});
     getDocs(q)
        .then((snapshot) => {
            //set portfolio to dom
@@ -125,7 +126,7 @@ export const updateTotal2 = (newTotal) => async dispatch => {
       })
   }).then(() => {
       dispatch({type: "updatePricesSuccess"});
-      dispatch(fetchPortfolio(uid));
+      dispatch(fetchPortfolio(uid, false));
   }).catch(err => {
     console.log(err.message);
     dispatch({type: "updatePricesFail"});
@@ -161,7 +162,7 @@ export const getMarket = () => async dispatch => {
         }
       }
       try {
-        const res = await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=1&sparkline=false&price_change_percentage=24h%2C7d%2C30d&locale=en&precision=2`)
+        const res = await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=1&sparkline=false&price_change_percentage=24h%2C7d%2C30d&locale=en&precision=3`)
         .then((res) => res.json())
         .then((data) => {
             data.forEach((item) => {
@@ -182,27 +183,44 @@ export const getMarket = () => async dispatch => {
     } catch (err) {
         console.log(err.message);
     }
+
+    // Add delay to avoid rate limiting
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
     try {
-        const res = await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=2&sparkline=false&price_change_percentage=24h%2C7d%2C30d&locale=en&precision=2`)
-        .then((res) => res.json())
-        .then((data) => {
-            data.forEach((item) => {
-                market2.push({
-                    id: item.id, 
-                    name: item.name, 
-                    image: item.image,
-                    rank: item.market_cap_rank, 
-                    price: item.current_price,
-                    change7: item.price_change_percentage_7d_in_currency ? Number(item.price_change_percentage_7d_in_currency) : 0.000, 
-                    change30: item.price_change_percentage_30d_in_currency ? Number(item.price_change_percentage_30d_in_currency) : 0.000,
-                    change: item.price_change_percentage_24h_in_currency ? item.price_change_percentage_24h_in_currency : 0.000
-                })
-            })
+        const res = await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=2&sparkline=false&price_change_percentage=24h%2C7d%2C30d&locale=en&precision=3`)
+        const responseData = await res.json();
+
+        console.log('Page 2 API Response:', {
+          status: res.status,
+          dataLength: responseData?.length,
+          hasError: responseData?.status?.error_message
         });
-        // await dispatch({type: "updateMarketPage", payload: page});
+
+        if (responseData?.status?.error_message) {
+          console.error('CoinGecko API Error (Page 2):', responseData.status.error_message);
+        }
+
+        if (Array.isArray(responseData)) {
+          responseData.forEach((item) => {
+              market2.push({
+                  id: item.id,
+                  name: item.name,
+                  image: item.image,
+                  rank: item.market_cap_rank,
+                  price: item.current_price,
+                  change7: item.price_change_percentage_7d_in_currency ? Number(item.price_change_percentage_7d_in_currency) : 0.000,
+                  change30: item.price_change_percentage_30d_in_currency ? Number(item.price_change_percentage_30d_in_currency) : 0.000,
+                  change: item.price_change_percentage_24h_in_currency ? item.price_change_percentage_24h_in_currency : 0.000
+              })
+          })
+        }
+
         await dispatch({type: "getMarket2Success", payload: market2});
+        console.log('Market2 dispatched with', market2.length, 'coins');
     } catch (err) {
-        console.log(err.message);
+        console.error('Error fetching page 2:', err.message);
+        dispatch({type: "getMarket2Fail", payload: err.message});
     }
     
 }

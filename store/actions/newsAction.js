@@ -3,6 +3,7 @@ import { collection, getDocs } from 'firebase/firestore';
 
 //fetch general news
 export const fetchNews = () => dispatch => {
+    dispatch({type: "fetchGeneralNewsRequest"});
     const newsColl = collection(db, "news", "general", "generalNews");
     getDocs(newsColl)
        .then(snapshot => {
@@ -10,11 +11,12 @@ export const fetchNews = () => dispatch => {
             dispatch({type: "fetchGeneralNewsSuccess", payload: snapshot.docs.map(doc => ({id: doc.id, ...doc.data()}))})
         }).catch(error => {
             console.log(error.message);
-            dispatch({type: "fetchGernalNewsFail", payload: error.message})
+            dispatch({type: "fetchGeneralNewsFail", payload: error.message})
         })
 }
 
 export const fetchBitcoinNews = () => dispatch => {
+    dispatch({type: "fetchBTCNewsRequest"});
     const btcNewsColl = collection(db, "news", "bitcoin", "bitcoinNews");
     getDocs(btcNewsColl)
        .then(snapshot => {
@@ -27,6 +29,7 @@ export const fetchBitcoinNews = () => dispatch => {
 }
 
 export const fetchAltsNews = () => dispatch => {
+    dispatch({type: "fetchAltsNewsRequest"});
     const altsNewsColl = collection(db, "news", "alts", "altsNews");
     getDocs(altsNewsColl)
        .then(snapshot => {

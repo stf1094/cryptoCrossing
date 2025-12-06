@@ -1,21 +1,16 @@
 "use client";
 import './globals.css';
 import './embla.css';
-// import { Inter } from 'next/font/google';
-// import Navbar from '../components/Navbar';
-import Navbar2 from '../components/Navbar2';
 import { Provider } from 'react-redux';
 import store from '../store/index';
-import { useDispatch, useSelector } from 'react-redux';
-import { setUser } from '@/store/actions/authAction';
+// import { useDispatch, useSelector } from 'react-redux';
+// import { setUser } from '@/store/actions/authAction';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { PersistGate } from 'reduxjs-toolkit-persist/integration/react';
 import { persistStore } from 'reduxjs-toolkit-persist';
 import { Analytics } from '@vercel/analytics/react';
 import Entry from '@/components/Entry';
-
-// const inter = Inter({ subsets: ['latin'] })
 
 /* export const metadata = {
   title: 'Create Next App',
@@ -36,7 +31,7 @@ export default function RootLayout({ children }) {
           <PersistGate persistor={persistor}>
              <div className="">
             {/*     <Navbar2 />  */}
-             <Entry children={...children} />  
+             <Entry children={children} />
               {/*     {children}  */}
                  <Analytics />
                <ToastContainer pauseOnHover={false} position="top-center" />
