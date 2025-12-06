@@ -219,8 +219,8 @@ export const getMarket = () => async dispatch => {
         await dispatch({type: "getMarket2Success", payload: market2});
         console.log('Market2 dispatched with', market2.length, 'coins');
     } catch (err) {
-        console.error('Error fetching page 2:', err.message);
-        dispatch({type: "getMarket2Fail", payload: err.message});
+        console.error('Error fetching page 2:', err?.message || err);
+        dispatch({type: "getMarket2Fail", payload: err?.message || 'Unknown error'});
     }
     
 }
