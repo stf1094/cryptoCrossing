@@ -21,7 +21,6 @@ function News() {
   // Handle authentication redirect
   useEffect(() => {
     if (!isAuthenticated && !authLoading) {
-      console.log("user not authenticated to view this page...");
       router.push('/login');
     }
   }, [isAuthenticated, authLoading, router]);
@@ -40,40 +39,40 @@ function News() {
 
     return (
         <>
-        <header className="bg-white shadow">
+        <header className="border-b border-ink/10 bg-white">
           <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-            <h1 className="text-3xl font-bold tracking-tight text-gray-900">News</h1>
+            <h1 className="font-display text-3xl font-bold tracking-tight text-ink">News</h1>
           </div>
         </header>
         <main>
           <div className="mx-auto max-w-5xl py-6 sm:px-6 lg:px-8">
           <Tab.Group>
-            <Tab.List className="flex space-x-1 rounded-xl bg-gray-200/70 p-1">
+            <Tab.List className="flex space-x-1 rounded-xl bg-ink/5 p-1">
               <Tab className={({ selected }) =>
                 classNames(
-                  'w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-gray-800',
-                  'ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2',
+                  'w-full rounded-lg py-2.5 text-sm font-medium leading-5 transition',
+                  'ring-offset-2 ring-offset-white focus:outline-none focus-visible:ring-2 focus-visible:ring-teal',
                   selected
-                    ? 'bg-white shadow'
-                    : 'text-blue-100 hover:bg-gray-300/60 hover:text-black'
+                    ? 'bg-white text-ink shadow'
+                    : 'text-ink/50 hover:bg-white/60 hover:text-ink'
                 )
               }>Bitcoin</Tab>
               <Tab className={({ selected }) =>
                 classNames(
-                  'w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-gray-800',
-                  'ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2',
+                  'w-full rounded-lg py-2.5 text-sm font-medium leading-5 transition',
+                  'ring-offset-2 ring-offset-white focus:outline-none focus-visible:ring-2 focus-visible:ring-teal',
                   selected
-                    ? 'bg-white shadow'
-                    : 'text-blue-100 hover:bg-gray-300/60 hover:text-black'
+                    ? 'bg-white text-ink shadow'
+                    : 'text-ink/50 hover:bg-white/60 hover:text-ink'
                 )
               }>General</Tab>
               <Tab className={({ selected }) =>
                 classNames(
-                  'w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-gray-800',
-                  'ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2',
+                  'w-full rounded-lg py-2.5 text-sm font-medium leading-5 transition',
+                  'ring-offset-2 ring-offset-white focus:outline-none focus-visible:ring-2 focus-visible:ring-teal',
                   selected
-                    ? 'bg-white shadow'
-                    : 'text-blue-100 hover:bg-gray-300/60 hover:text-black'
+                    ? 'bg-white text-ink shadow'
+                    : 'text-ink/50 hover:bg-white/60 hover:text-ink'
                 )
               }>Alt Coins</Tab>
             </Tab.List>
@@ -81,7 +80,7 @@ function News() {
               <Tab.Panel
               className={classNames(
                 'sm:rounded-xl bg-white p-3',
-                'ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2'
+                'ring-offset-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal'
               )}>
                 {isLoading ? (
                   <div className="text-center py-10 text-gray-500">Loading Bitcoin news...</div>
@@ -94,7 +93,7 @@ function News() {
               <Tab.Panel
               className={classNames(
                 'sm:rounded-xl bg-white p-3',
-                'ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2'
+                'ring-offset-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal'
               )}>
                 {isLoading ? (
                   <div className="text-center py-10 text-gray-500">Loading general news...</div>
@@ -107,7 +106,7 @@ function News() {
               <Tab.Panel
               className={classNames(
                 'sm:rounded-xl bg-white p-3',
-                'ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2'
+                'ring-offset-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal'
               )}>
                 {isLoading ? (
                   <div className="text-center py-10 text-gray-500">Loading alt coin news...</div>

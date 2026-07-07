@@ -7,7 +7,7 @@ export const getCurrentProfile = (uid) => async dispatch => {
        const profileDoc = doc(db, "profiles", uid);
        await getDoc(profileDoc).then(doc => dispatch({type: "getProfileSuccess", payload: doc.data()}));
     } catch(err) {
-        console.log(err.message);
+        console.error(err.message);
         dispatch({type: "profileError", payload: err.message});
     }
 }

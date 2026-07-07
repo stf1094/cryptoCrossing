@@ -4,9 +4,7 @@ function Inputs(props) {
     const [inputValue, setInputValue] = React.useState('');
     const [selectValue, setSelectValue] = React.useState('');
     const [coinIndex, setIndex] = React.useState(0);
-    //const [name, setName] = React.useState('');
-    
-   //const handleName = (e) => console.log(e.target.id);
+
     const handleChange = (event) => setInputValue(event.target.value);
 
     const handleClick = () => {
@@ -16,21 +14,10 @@ function Inputs(props) {
     
     }
     const handleSelectChange = (event) => {
-      console.log(selectValue);
         setSelectValue(event.target.value);
-        console.log(event.target.selectedIndex);
         const index = event.target.selectedIndex;
         setIndex(index);
-        console.log(coinIndex);
-       // console.log(props.coinsList[coinIndex]);
-       // console.log(event.target[selectedIndex]);
-        //console.log(parseInt())
-       // setName(event.target.name);
-       // console.log(selectValue);
     }
-   //console.log(props.coinsList[coinIndex]);
-   //console.log(Object.keys(props.coinsList));
-   // console.log(props.coinsList);
 
     return (
         <div style={{display: "flex" }}>

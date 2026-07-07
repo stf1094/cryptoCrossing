@@ -1,7 +1,7 @@
 "use client";
 import { Fragment } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
-import { Bars3Icon, BellIcon, XMarkIcon, UserCircleIcon } from '@heroicons/react/24/outline';
+import { Bars3Icon, XMarkIcon, UserCircleIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import Image from 'next/image';
 import logoImage from '../assets/cc-logo-icon.png';
@@ -9,14 +9,7 @@ import logoImage from '../assets/cc-logo-icon.png';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '@/store/actions/authAction';
 //import { useRouter } from "next/router";
-import { useRouter } from "next/navigation";
-
-const user = {
-  name: 'Bubba Dev',
-  email: 'bubba@example.com',
-  imageUrl:
-    'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-}
+import { useRouter, usePathname } from "next/navigation";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -25,12 +18,14 @@ function classNames(...classes) {
 export default function Navbar2() {
   const dispatch = useDispatch();
   const router = useRouter();
-  const { isAuthenticated } = useSelector((state) => state.auth);
+  const pathname = usePathname();
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
+  const accountEmail = user?.email || (user?.isAnonymous ? 'Guest session' : '');
   const navigation = [
-        { name: 'Portfolio', href: '/portfolio', current: false },
-        { name: 'News', href: '/news', current: false },
-        { name: 'Market', href: '/market', current: false },
-      ]
+        { name: 'Portfolio', href: '/portfolio' },
+        { name: 'News', href: '/news' },
+        { name: 'Market', href: '/market' },
+      ].map((item) => ({ ...item, current: pathname === item.href }))
 
 /*   const userNavigation = [
     { name: 'Your Profile', href: '/' },
@@ -48,30 +43,30 @@ export default function Navbar2() {
    {isAuthenticated ? 
    
       <div className="min-h-full">
-       <Disclosure as="nav" className="bg-gray-800">
+       <Disclosure as="nav" className="bg-ink">
           {({ open }) => (
             <>
               <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="flex h-16 items-center justify-between">
                   <div className="flex items-center">
-                    <div className="flex-shrink-0">
+                    <Link href="/portfolio" className="flex flex-shrink-0 items-center">
                       <Image
                         className="h-8 w-8"
                         src={logoImage}
                         alt="Crypto Crossing"
                       />
-                    </div>
+                    </Link>
                     <div className="hidden md:block">
-                      <div className="ml-10 flex items-baseline space-x-4">
+                      <div className="ml-10 flex items-baseline space-x-1">
                         {navigation.map((item) => (
                           <Link
                             key={item.name}
                             href={item.href}
                             className={classNames(
                               item.current
-                                ? 'bg-gray-900 text-white'
-                                : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                              'rounded-md px-3 py-2 text-sm font-medium'
+                                ? 'bg-white/10 text-white'
+                                : 'text-white/60 hover:bg-white/5 hover:text-white',
+                              'rounded-lg px-3 py-2 text-sm font-medium transition'
                             )}
                             aria-current={item.current ? 'page' : undefined}
                           >
@@ -86,9 +81,9 @@ export default function Navbar2() {
                      {isAuthenticated ? (
                       <Menu as="div" className="relative ml-3">
                         <div>
-                          <Menu.Button className="flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                          <Menu.Button className="flex max-w-xs items-center rounded-full text-sm text-white/70 transition hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-teal focus-visible:ring-offset-2 focus-visible:ring-offset-ink">
                             <span className="sr-only">Open user menu</span>
-                            <UserCircleIcon className="h-8 w-8 white" alt="" />
+                            <UserCircleIcon className="h-8 w-8" alt="" />
                           </Menu.Button>
                         </div>
                         <Transition
@@ -123,7 +118,7 @@ export default function Navbar2() {
 
                   <div className="-mr-2 flex md:hidden">
                     {/* Mobile menu button */}
-                    <Disclosure.Button className="inline-flex items-center justify-center rounded-md bg-gray-800 p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                    <Disclosure.Button className="inline-flex items-center justify-center rounded-lg p-2 text-white/60 hover:bg-white/10 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-teal focus-visible:ring-offset-2 focus-visible:ring-offset-ink">
                       <span className="sr-only">Open main menu</span>
                       {open ? (
                         <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
@@ -143,8 +138,8 @@ export default function Navbar2() {
                       as="a"
                       href={item.href}
                       className={classNames(
-                        item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                        'block rounded-md px-3 py-2 text-base font-medium'
+                        item.current ? 'bg-white/10 text-white' : 'text-white/60 hover:bg-white/5 hover:text-white',
+                        'block rounded-lg px-3 py-2 text-base font-medium'
                       )}
                       aria-current={item.current ? 'page' : undefined}
                     >
@@ -153,43 +148,36 @@ export default function Navbar2() {
                   ))}
                 </div>
 
-                <div className="border-t border-gray-700 pb-3 pt-4">
-                  {isAuthenticated ? 
+                <div className="border-t border-white/10 pb-3 pt-4">
+                  {isAuthenticated ?
                   <div className="flex items-center px-5">
                     <div className="flex-shrink-0">
-                      <UserCircleIcon className="h-10 w-10 rounded-full" />
+                      <UserCircleIcon className="h-10 w-10 rounded-full text-white/70" />
                     </div>
                     <div className="ml-3">
-                      <div className="text-base font-medium leading-none text-white">{user.name}</div>
-                      <div className="text-sm font-medium leading-none text-gray-400">{user.email}</div>
+                      <div className="text-base font-medium leading-none text-white">Signed in</div>
+                      <div className="mt-1 font-mono text-sm leading-none text-white/40">{accountEmail}</div>
                     </div>
-                    <button
-                      type="button"
-                      className="ml-auto flex-shrink-0 rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                    >
-                      <span className="sr-only">View notifications</span>
-                      <BellIcon className="h-6 w-6" aria-hidden="true" />
-                      
-                    </button>
                   </div>
                   : <></>
                   }
-                  {isAuthenticated ? 
+                  {isAuthenticated ?
                   <div className="mt-3 space-y-1 px-2">
                       <Disclosure.Button
                         as="a"
                         href={'/account'}
-                        className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
+                        className="block rounded-lg px-3 py-2 text-base font-medium text-white/60 hover:bg-white/5 hover:text-white"
                       >
                         My Profile
                       </Disclosure.Button>
                       <Disclosure.Button
-                        onClick={logout}
-                        className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
+                        as="button"
+                        onClick={logoutClick}
+                        className="block w-full rounded-lg px-3 py-2 text-left text-base font-medium text-white/60 hover:bg-white/5 hover:text-white"
                       >
                         Logout
                       </Disclosure.Button>
-                  
+
                   </div>
                   : <></>
                   }

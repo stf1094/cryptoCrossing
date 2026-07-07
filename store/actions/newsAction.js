@@ -10,7 +10,7 @@ export const fetchNews = () => dispatch => {
            //set news to DOM, state
             dispatch({type: "fetchGeneralNewsSuccess", payload: snapshot.docs.map(doc => ({id: doc.id, ...doc.data()}))})
         }).catch(error => {
-            console.log(error.message);
+            console.error(error.message);
             dispatch({type: "fetchGeneralNewsFail", payload: error.message})
         })
 }
@@ -23,7 +23,7 @@ export const fetchBitcoinNews = () => dispatch => {
            //set news to DOM, state
             dispatch({type: "fetchBTCNewsSuccess", payload: snapshot.docs.map(doc => ({id: doc.id, ...doc.data()}))})
         }).catch(error => {
-            console.log(error.message);
+            console.error(error.message);
             dispatch({type: "fetchBTCNewsFail", payload: error.message})
         })
 }
@@ -36,7 +36,7 @@ export const fetchAltsNews = () => dispatch => {
            //set news to DOM, state
             dispatch({type: "fetchAltsNewsSuccess", payload: snapshot.docs.map(doc => ({id: doc.id, ...doc.data()}))})
         }).catch(error => {
-            console.log(error.message);
+            console.error(error.message);
             dispatch({type: "fetchAltsNewsFail", payload: error.message})
         })
 } 

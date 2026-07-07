@@ -20,20 +20,53 @@
   --dark-purple: #131a35;
   --gradient-3: linear-gradient(245deg, coral 7%, #2b6aff 49%, #44d2da 92% );
   --gradient-2: linear-gradient(245deg, coral 20%, #eb385c 82% );
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+  /* Brand tokens */
+  --ink: #0A0E1F;
+  --ink-2: #10152E;
+  --surface: #151B38;
+  --paper: #F6F7FB;
+  --teal: #44D2DA;
+  --up: #16C784;
+  --down: #EA3943;
+  --line: rgba(255, 255, 255, 0.08);
 }
 
 body {
   background: #fff;
   max-width: 100vw;
   overflow-x: hidden;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  color: #0A0E1F;
+}
+
+/* Ticker marquee (the "crossing") */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.marquee {
+  overflow: hidden;
+  white-space: nowrap;
+}
+.marquee-track {
+  display: inline-flex;
+  animation: marquee 42s linear infinite;
+  will-change: transform;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+/* Price-change flash */
+@keyframes flash-up { from { background-color: rgba(22, 199, 132, 0.18); } to { background-color: transparent; } }
+@keyframes flash-down { from { background-color: rgba(234, 57, 57, 0.18); } to { background-color: transparent; } }
+.flash-up { animation: flash-up 0.9s ease-out; }
+.flash-down { animation: flash-down 0.9s ease-out; }
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation: none; }
+  .flash-up, .flash-down { animation: none; }
 }
 
 a {
@@ -184,9 +217,11 @@ img {
 }
 
 .dashboard-total {
+  font-family: var(--font-mono), ui-monospace, monospace;
   font-size: 2em;
-  font-weight: bold;
-  color: black;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
 }
 
 .account-container {
@@ -519,9 +554,23 @@ img {
 .form textarea {
   display: block;
   width: 100%;
-  padding: 0.4rem;
-  font-size: 1.2rem;
-  border: 1px solid #ccc;
+  padding: 0.7rem 0.9rem;
+  font-size: 1.05rem;
+  border: 1px solid #d6dae4;
+  border-radius: 0.6rem;
+  background: #fff;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.form input[type='text']:focus,
+.form input[type='email']:focus,
+.form input[type='password']:focus,
+.form input[type='date']:focus,
+.form select:focus,
+.form textarea:focus {
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px rgba(68, 210, 218, 0.25);
 }
 
 .form input[type='submit'],
@@ -752,13 +801,15 @@ button {
 .price-table-header {
   display: flex;
   flex-direction: row;
-  border-bottom: 1px solid lightgray;
-  border-top: 1px solid lightgray;
-  font-size: 18px;
-  font-weight: bold;
-  text-decoration: underline;
-  padding-top: 0.8rem;
-  padding-bottom: 0.8rem;
+  border-bottom: 1px solid #e3e6ee;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #6b7280;
+  padding-top: 0.9rem;
+  padding-bottom: 0.9rem;
 }
 
 .price-item {
@@ -897,10 +948,12 @@ height: 200px;
   width: 67%;
 }
 .green {
-  color: rgb(12, 194, 118);
+  color: var(--up);
+  font-variant-numeric: tabular-nums;
 }
 .red {
-  color: rgb(202, 31, 31);
+  color: var(--down);
+  font-variant-numeric: tabular-nums;
 }
 .orange {
   background-color: rgb(202, 74, 35);

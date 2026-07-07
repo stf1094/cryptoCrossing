@@ -40,13 +40,23 @@ useEffect(() => {
   return (
     <>
    
-     <div className="grid xs:grid-cols-1 xl:grid-cols-4 xl:gap-7">
-      <div className="bg-sky-500 h-screen xxs:hidden xl:block"></div>
-     
-      <div className="sign-in-container flex flex-column mx-auto my-auto h-screen w-screen sm:justify-center xs:mt-14 xs:px-8 sm:-mt-10 xl:col-span-2">
+     <div className="grid min-h-screen xs:grid-cols-1 xl:grid-cols-5">
+      <div
+        className="hidden bg-ink p-12 text-white xl:col-span-2 xl:flex xl:flex-col xl:justify-between"
+        style={{ backgroundImage: 'radial-gradient(70% 50% at 20% 10%, rgba(68,210,218,0.18), transparent 60%)' }}
+      >
+        <span className="font-mono text-xs uppercase tracking-[0.28em] text-teal">Crypto Crossing</span>
+        <div>
+          <h2 className="font-display text-4xl font-bold leading-tight">Your portfolio is right where you left it.</h2>
+          <p className="mt-4 max-w-sm text-white/60">Log in to pick up your holdings, market view, and news in one place.</p>
+        </div>
+        <span className="font-mono text-xs text-white/30">Portfolio · Markets · News</span>
+      </div>
+
+      <div className="sign-in-container flex flex-column mx-auto my-auto h-screen w-screen sm:justify-center xs:mt-14 xs:px-8 sm:-mt-10 xl:col-span-3">
         <Image src={logo} alt="crypto-logo" className="w-44 mb-12 cursor-pointer" onClick={() => router.push('/')}></Image>
-        <h1 className="large text-black font-bold">Log In</h1>
-        <p className="lead"><i className="fas fa-user"></i> Sign into your Account</p>
+        <h1 className="large font-display text-ink font-bold">Log in</h1>
+        <p className="lead">Welcome back — sign into your account.</p>
           <form className="form" onSubmit={e => onSubmit(e)}>
             <div className="form-group">
             <input 
@@ -69,17 +79,15 @@ useEffect(() => {
             />
             </div>
             
-            <input type="submit" className="mt-3 bg-sky-400 py-3 px-8 text-white hover:bg-sky-300 hover:cursor-pointer rounded-xl" value="Login" />
+            <input type="submit" className="mt-3 bg-teal py-3 px-8 font-semibold text-ink hover:bg-teal-600 hover:cursor-pointer rounded-xl transition-colors" value="Log in" />
         </form>
         <p className="mt-6">
-           Don't have an account? <Link className="text-blue-500" href="/register">Sign Up</Link>
+           Don&apos;t have an account? <Link className="font-medium text-teal-600 hover:text-teal" href="/register">Sign up</Link>
         </p>
         <p className="my-2">
-           Forgot your password? <Link className="text-blue-500" href="/forgotpassword">Click Here</Link>
+           Forgot your password? <Link className="font-medium text-teal-600 hover:text-teal" href="/forgotpassword">Reset it</Link>
         </p>
         </div>
-         
-        <div className="bg-blue-500 h-screen w-100 xxs:hidden xl:block"></div>
         </div>
    
     </>

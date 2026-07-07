@@ -17,15 +17,6 @@ function Market() {
     dispatch(getHotColdCoins(1));
   }, [dispatch]);
 
-  // Log market data for debugging
-  useEffect(() => {
-    console.log('Market data:', {
-      market: market?.length,
-      market2: market2?.length,
-      currentPage
-    });
-  }, [market, market2, currentPage]);
-
   // Determine which market data to display based on current page
   const displayedMarket = currentPage === 1 ? market : market2;
 
@@ -36,9 +27,9 @@ function Market() {
 
   return (
     <>
-      <header className="bg-white shadow">
+      <header className="border-b border-ink/10 bg-white">
         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900">Market</h1>
+          <h1 className="font-display text-3xl font-bold tracking-tight text-ink">Market</h1>
         </div>
       </header>
       <main>
@@ -62,20 +53,20 @@ function Market() {
           <div className="flex flex-row items-center mb-3">
             <h3 className="text-lg font-bold mb-2 xs:px-4 md:px-0 mr-5">Top 500</h3>
             <button
-              className={`mr-2 px-3 py-1 rounded ${
+              className={`mr-2 rounded-lg px-3 py-1 font-mono text-sm transition ${
                 currentPage === 1
-                  ? 'bg-sky-400 text-white'
-                  : 'bg-gray-200 hover:bg-gray-300'
+                  ? 'bg-teal font-semibold text-ink'
+                  : 'bg-ink/5 text-ink/60 hover:bg-ink/10'
               }`}
               onClick={() => onPageClick(1)}
             >
               1-250
             </button>
             <button
-              className={`mx-2 px-3 py-1 rounded ${
+              className={`mx-2 rounded-lg px-3 py-1 font-mono text-sm transition ${
                 currentPage === 2
-                  ? 'bg-sky-400 text-white'
-                  : 'bg-gray-200 hover:bg-gray-300'
+                  ? 'bg-teal font-semibold text-ink'
+                  : 'bg-ink/5 text-ink/60 hover:bg-ink/10'
               }`}
               onClick={() => onPageClick(2)}
             >

@@ -38,9 +38,7 @@ export default function AddCoinSlideover({showAddCoinSlide, setShowAddCoinSlide,
   const handleChange = (event) => setInputValue(event.target.value);
 
   const handleSelectChange = (id, index) => {
-        console.log(id, index);
         setSelected(id);
-        // const index = event.target.selectedIndex;
         setIndex(index);
   }
   const filter = (e) => {
@@ -62,8 +60,6 @@ export default function AddCoinSlideover({showAddCoinSlide, setShowAddCoinSlide,
      if (inputValue === '' || inputValue === null || inputValue === 0) {
       toast.error('Please enter a valid number in the amount field');
      } else {
-      // console.log("coinIndex: ", coinIndex);
-      console.log("selected", selected);
       const coin = {
         amount: Number(inputValue),
         name: selected.name,

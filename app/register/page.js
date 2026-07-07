@@ -29,13 +29,6 @@ const onSubmit = e => {
     dispatch(register(email, password));
 }
 
-/* useEffect(() => {
-  console.log(formErrors);
-  if (Object.keys(formErrors).length === 0 && isSubmit) {
-    console.log(formData);
-  }
-}, [formErrors]); */
-
 /* const validate = (values) => {
   const errors = {};
   const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
@@ -66,12 +59,22 @@ useEffect(() => {
 
   return (
     <>
-     <div className="grid xs:grid-cols-1 xl:grid-cols-4 xl:gap-7">
-      <div className="bg-sky-500 h-screen xs:hidden xl:block"></div>
-      <div className="register-container flex flex-column mx-auto my-auto h-screen w-screen sm:justify-center xs:mt-14 xs:px-8 sm:-mt-10 xl:col-span-2">
+     <div className="grid min-h-screen xs:grid-cols-1 xl:grid-cols-5">
+      <div
+        className="hidden bg-ink p-12 text-white xl:col-span-2 xl:flex xl:flex-col xl:justify-between"
+        style={{ backgroundImage: 'radial-gradient(70% 50% at 20% 10%, rgba(68,210,218,0.18), transparent 60%)' }}
+      >
+        <span className="font-mono text-xs uppercase tracking-[0.28em] text-teal">Crypto Crossing</span>
+        <div>
+          <h2 className="font-display text-4xl font-bold leading-tight">Track every coin you hold, in one place.</h2>
+          <p className="mt-4 max-w-sm text-white/60">Create an account to start building your portfolio in under a minute.</p>
+        </div>
+        <span className="font-mono text-xs text-white/30">Portfolio · Markets · News</span>
+      </div>
+      <div className="register-container flex flex-column mx-auto my-auto h-screen w-screen sm:justify-center xs:mt-14 xs:px-8 sm:-mt-10 xl:col-span-3">
       <Image src={logo} alt="crypto-logo" className="w-44 mb-12"></Image>
-        <h1 className="large text-black font-bold">Sign Up</h1>
-        <p className="lead"><i className="fas fa-user"></i> Create Your Account</p>
+        <h1 className="large font-display text-ink font-bold">Sign up</h1>
+        <p className="lead">Create your account to get started.</p>
         <form className="form" onSubmit={e => onSubmit(e)}>
             <div className="form-group">
             <input 
@@ -93,13 +96,12 @@ useEffect(() => {
                 name="password"
             />
             </div>
-            <input type="submit" className="mt-3 bg-sky-400 py-3 px-8 text-white hover:bg-sky-300 hover:cursor-pointer rounded-xl" value="Register" />
+            <input type="submit" className="mt-3 bg-teal py-3 px-8 font-semibold text-ink hover:bg-teal-600 hover:cursor-pointer rounded-xl transition-colors" value="Create account" />
         </form>
         <p className="mt-6">
-           Already have an account? <Link className="text-blue-500" href="/login">Login</Link>
+           Already have an account? <Link className="font-medium text-teal-600 hover:text-teal" href="/login">Log in</Link>
         </p>
         </div>
-        <div className="bg-blue-500 h-screen w-100 xs:hidden xl:block"></div>
    </div>
 </>
 

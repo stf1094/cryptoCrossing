@@ -20,8 +20,7 @@ function PriceTable(props) {
       // a[field].
         a[field] > b[field] ? 1 * (sortOrder === "asc" ? 1 : -1) : -1 * (sortOrder === "asc" ? 1 : -1));
         setSortField(field);
-        setSortOrder((sortOrder === "asc" ? "desc" : "asc")); 
-        console.log(sortOrder);
+        setSortOrder((sortOrder === "asc" ? "desc" : "asc"));
         setTableData(newdata);
   }
 

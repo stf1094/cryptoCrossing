@@ -22,8 +22,6 @@ function TrendingSlider({ hot7 }) {
   }, [emblaApi])
  
  useEffect(() => {
-  // console.log("sliderData: ", sliderData);
-  // console.log("hot: ", hot7);
   setSliderData(hot7);
  }, []);
   return (

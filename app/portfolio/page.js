@@ -14,12 +14,13 @@ import LoadingState from '@/components/LoadingState';
 function EmptyPortfolio({ openAddCoinSlide }) {
   return (
     <div className="flex flex-col items-center justify-center h-96 text-center">
-      <h2 className="text-5xl">Start creating your<br />portfolio today!</h2>
-      <button 
-        onClick={openAddCoinSlide} 
-        className="mt-10 bg-sky-400 py-3 px-8 text-white hover:bg-sky-300 rounded-xl transition-colors"
+      <h2 className="font-display text-5xl font-bold text-ink">Start building your<br />portfolio today</h2>
+      <p className="mt-4 text-ink/60">Add the coins you already hold and watch their value move together.</p>
+      <button
+        onClick={openAddCoinSlide}
+        className="mt-8 rounded-xl bg-teal py-3 px-8 font-semibold text-ink transition-colors hover:bg-teal-600"
       >
-        Get started
+        Add your first coin
       </button>
     </div>
   );
@@ -62,7 +63,6 @@ const Portfolio = () => {
     // Handle authentication redirect
     useEffect(() => {
         if (!isAuthenticated) {
-          console.log("user not authenticated to view this page...");
           router.push('/login');
         }
     }, [isAuthenticated, router]);
@@ -91,12 +91,12 @@ const Portfolio = () => {
 
 return (
   <>
-    <header className="bg-white shadow">
+    <header className="border-b border-ink/10 bg-white">
         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 flex-row justify-between">
-           <h1 className="text-3xl font-bold tracking-tight text-gray-900">Portfolio</h1>
+           <h1 className="font-display text-3xl font-bold tracking-tight text-ink">Portfolio</h1>
            <div className="flex-row">
-             <PlusCircleIcon className="h-10 w-10 hover:cursor-pointer hover:text-sky-300 mr-3" aria-hidden="true" onClick={openAddCoinSlide} />
-             <ArrowPathRoundedSquareIcon className="h-10 w-10 hover:cursor-pointer hover:text-sky-300" aria-hidden="true" onClick={onUpdatePrices} />
+             <PlusCircleIcon className="h-10 w-10 hover:cursor-pointer hover:text-teal mr-3" aria-hidden="true" onClick={openAddCoinSlide} />
+             <ArrowPathRoundedSquareIcon className="h-10 w-10 hover:cursor-pointer hover:text-teal" aria-hidden="true" onClick={onUpdatePrices} />
            </div>
         </div>
     </header>

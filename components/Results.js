@@ -27,7 +27,6 @@ function Results({setModalAmount, setModalCoin, setModalCoinId, openUpdateModal,
       }
     })
   });
-  // console.log(newPortfolio);
   const openDeleteModal = (id, name, amount) => {
     setCoinToDeleteId(id);
     setCoinToDeleteName(name);
@@ -41,7 +40,6 @@ function Results({setModalAmount, setModalCoin, setModalCoinId, openUpdateModal,
      openUpdateModal();
   }
   const handleRemove = (id) => {
-    console.log("remove coin");
     dispatch(deleteACoin(id))
   }
   /* if (portfolioLoading) {
@@ -58,7 +56,7 @@ function Results({setModalAmount, setModalCoin, setModalCoinId, openUpdateModal,
         />
        
         {newPortfolio.length > 0 &&
-        <div className="flex-row justify-between mx-2 mt-4 mb-1 px-6 py-3 bg-sky-300 items-center text-left rounded-t-xl font-bold">
+        <div className="flex-row justify-between mx-2 mt-4 mb-1 px-6 py-3 bg-ink text-white items-center text-left rounded-t-xl font-mono text-xs uppercase tracking-[0.12em]">
             <span className="xs:basis-2/12">Coin</span>
             <div className="xs:basis-2/12 sm:text-left">
               <span className="md:ml-10 lg:ml-8">Price</span>
@@ -73,7 +71,7 @@ function Results({setModalAmount, setModalCoin, setModalCoinId, openUpdateModal,
         </div>
         }
          { newPortfolio && newPortfolio.map((item, index) => 
-             <div id={item.coin.id} className="coin-row border border-slate-400 hover:border-sky-300 hover:bg-sky-50" key={item.coin.id}>
+             <div id={item.coin.id} className="coin-row border border-slate-200 hover:border-teal hover:bg-teal/5" key={item.coin.id}>
                 <div className="coin-title-group">
                     <img src={item.coin.img} alt="coin-logo" className="h-12 w-12 mt-1" />
                     <div className="coin-title-amount">
@@ -85,7 +83,7 @@ function Results({setModalAmount, setModalCoin, setModalCoinId, openUpdateModal,
                    </div>
                 </div>
                 <div className="xs:basis-2/12 sm:text-left">
-                  <span className="coin-price ml-4">${item.coin.currentPrice}</span>
+                  <span className="coin-price ml-4 font-mono tabular-nums">${item.coin.currentPrice}</span>
                 </div>
                 <div className="xs:basis-2/12 sm:text-left">
                   <span className={item.change24h > 0 ? 'green' : 'red'}>
@@ -94,7 +92,7 @@ function Results({setModalAmount, setModalCoin, setModalCoinId, openUpdateModal,
                     </span>
                 </div>
                 <div className="xs:basis-4/12 sm:text-left">
-                  <span className="coin-total-amount">${item.coin.value.toFixed(2)}</span>
+                  <span className="coin-total-amount font-mono tabular-nums">${item.coin.value.toFixed(2)}</span>
                   {item && Number(item.coin.value / total * 100).toFixed(1) <= 100 ? <PercentageBar bgColor='orange' percent={Number(item.coin.value / total * 100).toFixed(1)} /> : <PercentageBarLoading />}
                 </div>
                 <div className="button-group mt-q flex flex-row">
