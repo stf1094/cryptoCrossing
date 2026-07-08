@@ -1,34 +1,98 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Crypto Crossing
+
+A cryptocurrency portfolio tracker built with Next.js and Firebase. Users can track their holdings, watch live market data for 500+ coins, and read curated crypto news. Supports both registered accounts and anonymous guest sessions.
+
+> _Add a screenshot or demo GIF here — it's the single highest-impact thing for a portfolio README._
+> _Live demo: https://your-deploy-url.example_
+
+## Features
+
+- 📊 **Portfolio tracking** — add coins, combine holdings, and see total portfolio value update in real time
+- 📈 **Live market data** — 500 coins from the CoinGecko API with 24h / 7d / 30d change and sortable columns
+- 🔥 **Trending** — "hot" and "cold" movers surfaced in a carousel
+- 📰 **News** — general, Bitcoin, and altcoin news feeds
+- 🔐 **Auth** — email/password accounts plus one-tap anonymous guest login
+- 💾 **Persistence** — auth and market state persisted to localStorage for fast reloads
+
+## Tech Stack
+
+- **Framework:** Next.js (App Router) + React
+- **State:** Redux Toolkit with `reduxjs-toolkit-persist`
+- **Backend:** Firebase Authentication & Cloud Firestore
+- **Data fetching:** SWR + CoinGecko API
+- **Styling:** Tailwind CSS
+- **Notifications:** React Toastify
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+
+- A [Firebase](https://firebase.google.com/) project with Authentication (Email/Password + Anonymous) and Firestore enabled
+
+### Installation
 
 ```bash
+# 1. Clone and install
+git clone https://github.com/your-username/crypto-crossing.git
+cd crypto-crossing
+npm install
+
+# 2. Configure environment variables
+cp .env.example .env.local
+# then fill in your Firebase config values
+
+# 3. Run the dev server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+### Environment Variables
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+See [.env.example](.env.example) for the full list. All `NEXT_PUBLIC_*` Firebase
+values are safe to expose to the browser — that's expected for a Firebase web
+app. Your data is secured by **Firestore Security Rules**, not by hiding these
+keys.
 
-## Learn More
+## Scripts
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run dev     # start dev server on localhost:3000
+npm run build   # production build
+npm start       # start production server
+npm run lint    # lint
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Architecture
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+### State (Redux)
 
-## Deploy on Vercel
+The store ([store/index.js](store/index.js)) is split into slices: `auth`,
+`portfolio`, `profile`, `news`, and `market`. Only `auth` and `market` are
+persisted to localStorage.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Firestore data model
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```
+profiles/{userId}
+  ├─ uid, email, total
+  └─ coins/{coinId}    (subcollection)
+       └─ coinId, name, amount, currentPrice, value
+
+news/
+  ├─ general/generalNews/{newsId}
+  ├─ bitcoin/bitcoinNews/{newsId}
+  └─ alts/altsNews/{newsId}
+```
+
+### Data flow
+
+1. Portfolio holdings are fetched from Firestore per user.
+2. Market data is pulled from CoinGecko in two pages of 250 coins (with a delay between requests to respect rate limits).
+3. Prices sync back into the user's Firestore portfolio and the profile total is recalculated after every mutation.
+
+## Notes
+
+- CoinGecko has rate limits; the market fetch spaces out its page-2 request to avoid `429`s.
+- All app pages are client components (`"use client"`) since they rely on Redux, hooks, and browser APIs.
