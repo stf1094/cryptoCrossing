@@ -69,21 +69,21 @@ const Portfolio = () => {
 
     // Fetch portfolio data when user is authenticated
     useEffect(() => {
-        if (user && isAuthenticated) {
+        if (user?.uid && isAuthenticated) {
           dispatch(fetchPortfolio(user.uid, true));
         }
     }, [user, isAuthenticated, dispatch]);
 
     // Update prices on initial load when both portfolio and market data are available
     useEffect(() => {
-        if (user && isAuthenticated && data && portfolio && portfolio.length > 0 && !hasUpdatedPricesRef.current) {
+        if (user?.uid && isAuthenticated && data && portfolio && portfolio.length > 0 && !hasUpdatedPricesRef.current) {
           hasUpdatedPricesRef.current = true;
           dispatch(updatePrices(data, user.uid));
         }
     }, [data, portfolio, user, isAuthenticated, dispatch]); 
 
     const onUpdatePrices = () => {
-        if (user && isAuthenticated && data) {
+        if (user?.uid && isAuthenticated && data) {
         dispatch(updatePrices(data, user.uid));
     }
     }

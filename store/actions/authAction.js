@@ -110,8 +110,8 @@ export const login = (email, password) => async dispatch => {
 
  export const loginAnon = () => dispatch => {
      signInAnonymously(auth)
-     .then((user) => {
-         dispatch({type: "loginAnonSuccess", payload: user});
+     .then((userCredential) => {
+         dispatch({type: "loginAnonSuccess", payload: userCredential.user});
          dispatch(setUser());
      }).catch((error) => {
         dispatch({type: "loginAnonFail", payload: error.message});
