@@ -1,4 +1,5 @@
 import React, {useState, useCallback} from 'react';
+import Image from 'next/image';
 import useEmblaCarousel, { EmblaOptionsType } from "embla-carousel-react";
 import { ArrowTrendingUpIcon, ArrowTrendingDownIcon } from '@heroicons/react/24/solid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -30,7 +31,7 @@ function TrendingSlider({ hot7 }) {
                     <div className="border border-slate-400 bg-white flex flex-row px-3 py-3 rounded-lg h-full">
                         <div className="flex flex-column w-1/2">
                           <div className='flex flex-row'>
-                            <img className="price-table-coin-image" alt="coin-logo" src={item.image} />
+                            <Image className="price-table-coin-image" alt="coin-logo" src={item.image} width={25} height={25} />
                             <div>
                               <span className="text-sm font-bold">{item.name}</span>
                               <p className='text-md'>${item.current_price}</p>

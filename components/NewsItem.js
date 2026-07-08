@@ -1,11 +1,12 @@
 import React from 'react'
+import Image from 'next/image'
 
 function NewsItem(props) {
     return (
     <div className="news-item">
         <div className="news-image-container sm:basis-4/12">
             <a href={props.url} target="_blank" rel="noreferrer">
-              <img className="news-image" alt="news-story" src={props.image}></img>
+              {props.image && <Image className="news-image" alt="news-story" src={props.image} width={320} height={180} />}
             </a>
         </div>
         <div className="news-content sm:basis-8/12">
