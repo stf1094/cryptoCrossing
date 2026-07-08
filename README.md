@@ -1,10 +1,14 @@
 # Crypto Crossing
 
+[![CI](https://github.com/stf1094/cryptoCrossing/actions/workflows/ci.yml/badge.svg)](https://github.com/stf1094/cryptoCrossing/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-crypto--crossing-2ea44f)](https://crypto-crossing-7hai.vercel.app)
+
 A cryptocurrency portfolio tracker built with Next.js and Firebase. Users can track their holdings, watch live market data for 500+ coins, and read curated crypto news. Supports both registered accounts and anonymous guest sessions.
 
-![Crypto Crossing — track your portfolio, live markets, and news in one place](docs/screenshot.png)
+**▶︎ [View the live demo](https://crypto-crossing-7hai.vercel.app)**
 
-> **Live demo:** <https://crypto-crossing-7hai.vercel.app>
+![Crypto Crossing — track your portfolio, live markets, and news in one place](docs/screenshot.png)
 
 ## Features
 
@@ -97,3 +101,7 @@ news/
 
 - CoinGecko has rate limits; the market fetch spaces out its page-2 request to avoid `429`s.
 - All app pages are client components (`"use client"`) since they rely on Redux, hooks, and browser APIs.
+
+## License
+
+[MIT](LICENSE) © stf1094
