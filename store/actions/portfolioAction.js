@@ -63,6 +63,10 @@ export const deleteACoin = (id, amount, name) => dispatch => {
 
 // fetch portfolio
 export const fetchPortfolio = (userId, setLoading) => dispatch => {
+    if (!userId) {
+        console.warn('fetchPortfolio called without a userId; skipping.');
+        return;
+    }
     const coinsColl = collection(db, 'profiles', userId, 'coins');
     const q = query(coinsColl, orderBy("value", "desc"));
     setLoading && dispatch({type: "fetchPortfolioRequest"});
