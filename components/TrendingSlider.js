@@ -1,4 +1,4 @@
-import React, {useState, useCallback, useEffect} from 'react';
+import React, {useState, useCallback} from 'react';
 import useEmblaCarousel, { EmblaOptionsType } from "embla-carousel-react";
 import { ArrowTrendingUpIcon, ArrowTrendingDownIcon } from '@heroicons/react/24/solid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -20,10 +20,7 @@ function TrendingSlider({ hot7 }) {
   const scrollNext = useCallback(() => {
     if (emblaApi) emblaApi.scrollNext()
   }, [emblaApi])
- 
- useEffect(() => {
-  setSliderData(hot7);
- }, []);
+
   return (
     <div className="embla overflow-hidden">
       <div className="embla__viewport" ref={emblaRef}>

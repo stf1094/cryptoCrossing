@@ -1,0 +1,22 @@
+version: 2
+updates:
+  # npm dependencies — grouped so bumps arrive as a single PR
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    groups:
+      npm-dependencies:
+        patterns:
+          - "*"
+
+  # keep the GitHub Actions used in CI up to date, also grouped
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      github-actions:
+        patterns:
+          - "*"
