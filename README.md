@@ -2,7 +2,8 @@
 
 A cryptocurrency portfolio tracker built with Next.js and Firebase. Users can track their holdings, watch live market data for 500+ coins, and read curated crypto news. Supports both registered accounts and anonymous guest sessions.
 
-> _Add a screenshot or demo GIF here — it's the single highest-impact thing for a portfolio README._
+![Crypto Crossing — track your portfolio, live markets, and news in one place](docs/screenshot.png)
+
 > _Live demo: https://your-deploy-url.example_
 
 ## Features
