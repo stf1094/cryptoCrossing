@@ -39,7 +39,7 @@ const onSubmit = e => {
     <div className="bg-sky-500 h-screen xs:hidden xl:block"></div>
       <div className="sign-in-container flex flex-column mx-auto my-auto h-screen w-screen sm:justify-center xs:mt-14 xs:px-8 sm:-mt-10 xl:col-span-2">
      <h1 className="large text-black font-bold">Forgot Password</h1>
-      <p className="lead"><i className="fas fa-user"></i> Just enter your email below. If we have you in our system, you'll receive a link to reset your password.</p>
+      <p className="lead"><i className="fas fa-user"></i> Just enter your email below. If we have you in our system, you&apos;ll receive a link to reset your password.</p>
         <form className="form" onSubmit={e => onSubmit(e)}>
             <div className="form-group">
             <input 
@@ -54,7 +54,7 @@ const onSubmit = e => {
             <input type="submit" className="mt-3 bg-sky-400 py-3 px-8 text-white hover:bg-sky-300 hover:cursor-pointer rounded-xl" value="Send email" />
         </form>
         <p className="mt-6">
-           Don't have an account? <Link className="text-blue-500" href="/register">Sign Up</Link>
+           Don&apos;t have an account? <Link className="text-blue-500" href="/register">Sign Up</Link>
         </p>
         </div>
         <div className="bg-blue-500 h-screen w-100 xs:hidden xl:block"></div>

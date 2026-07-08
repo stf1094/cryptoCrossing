@@ -49,7 +49,7 @@ export default function RootLayout({ children }) {
           <PersistGate persistor={persistor}>
              <div className="">
             {/*     <Navbar2 />  */}
-             <Entry children={children} />
+             <Entry>{children}</Entry>
               {/*     {children}  */}
                  <Analytics />
                <ToastContainer pauseOnHover={false} position="top-center" />
