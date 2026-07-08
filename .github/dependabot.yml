@@ -1,17 +1,28 @@
 version: 2
 updates:
-  # npm dependencies — grouped so bumps arrive as a single PR
+  # npm dependencies
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 5
     groups:
-      npm-dependencies:
-        patterns:
-          - "*"
+      # Bundle only minor + patch bumps into one PR — these are low-risk.
+      # Major bumps are left OUT of the group so they arrive as separate,
+      # individually reviewable PRs; that way one breaking major can't block
+      # the whole batch (as the @reduxjs/toolkit v2 conflict did).
+      npm-minor-patch:
+        update-types:
+          - "minor"
+          - "patch"
+    ignore:
+      # reduxjs-toolkit-persist@7 peer-requires @reduxjs/toolkit v1, so the v2
+      # major cannot be installed until we migrate off that persist library.
+      # Block the major update; minor/patch bumps of RTK still flow through.
+      - dependency-name: "@reduxjs/toolkit"
+        update-types: ["version-update:semver-major"]
 
-  # keep the GitHub Actions used in CI up to date, also grouped
+  # keep the GitHub Actions used in CI up to date, grouped together
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
