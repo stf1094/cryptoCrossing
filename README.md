@@ -4,7 +4,7 @@ A cryptocurrency portfolio tracker built with Next.js and Firebase. Users can tr
 
 ![Crypto Crossing — track your portfolio, live markets, and news in one place](docs/screenshot.png)
 
-> _Live demo: https://crypto-crossing-7hai.vercel.app
+> **Live demo:** <https://crypto-crossing-7hai.vercel.app>
 
 ## Features
 
@@ -28,15 +28,15 @@ A cryptocurrency portfolio tracker built with Next.js and Firebase. Users can tr
 
 ### Prerequisites
 
-- Node.js 18+
+- Node.js 20+
 - A [Firebase](https://firebase.google.com/) project with Authentication (Email/Password + Anonymous) and Firestore enabled
 
 ### Installation
 
 ```bash
 # 1. Clone and install
-git clone https://github.com/your-username/crypto-crossing.git
-cd crypto-crossing
+git clone https://github.com/stf1094/cryptoCrossing.git
+cd cryptoCrossing
 npm install
 
 # 2. Configure environment variables
