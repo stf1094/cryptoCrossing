@@ -1,4 +1,5 @@
 import React, {useRef, useState, Suspense} from 'react';
+import Image from 'next/image';
 import { useSelector, useDispatch } from 'react-redux';
 import { deleteACoin } from '../store/actions/portfolioAction';
 import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline';
@@ -73,7 +74,7 @@ function Results({setModalAmount, setModalCoin, setModalCoinId, openUpdateModal,
          { newPortfolio && newPortfolio.map((item, index) => 
              <div id={item.coin.id} className="coin-row border border-slate-200 hover:border-teal hover:bg-teal/5" key={item.coin.id}>
                 <div className="coin-title-group">
-                    <img src={item.coin.img} alt="coin-logo" className="h-12 w-12 mt-1" />
+                    <Image src={item.coin.img} alt="coin-logo" className="h-12 w-12 mt-1" width={48} height={48} />
                     <div className="coin-title-amount">
                       <span className="coin-title">{item.coin.name}</span>
                       <div>

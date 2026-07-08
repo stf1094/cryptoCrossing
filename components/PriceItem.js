@@ -1,4 +1,5 @@
 import React from 'react'
+import Image from 'next/image'
 
 function PriceItem(props) {
     return (
@@ -7,7 +8,7 @@ function PriceItem(props) {
             <span className="pl-2">{props.rank}</span>
           </div>
           <div className="flex-row xs:basis-3/12">
-             <img className="price-table-coin-image" alt="coin-logo" src={props.image} />
+             <Image className="price-table-coin-image" alt="coin-logo" src={props.image} width={25} height={25} />
              <span className="font-medium">{props.name}</span>
           </div>
             <div className="xs:basis-2/12 xs:text-right lg:text-left">

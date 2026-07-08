@@ -1,5 +1,6 @@
 "use client";
 import { Fragment, useState, useEffect } from 'react';
+import Image from 'next/image';
 import { Dialog, Transition, RadioGroup } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { toast } from 'react-toastify';
@@ -168,7 +169,7 @@ export default function AddCoinSlideover({showAddCoinSlide, setShowAddCoinSlide,
                                 <>
                                     <div className="flex w-full items-center justify-between">
                                     <div className="flex items-center">
-                                    <img src={item.image} alt="coin-logo" className="h-7 w-7 mr-4" />
+                                    <Image src={item.image} alt="coin-logo" className="h-7 w-7 mr-4" width={28} height={28} />
                                         <div className="text-sm">
                                         <RadioGroup.Label
                                             as="p"
@@ -257,7 +258,7 @@ export default function AddCoinSlideover({showAddCoinSlide, setShowAddCoinSlide,
                 {({ active, checked }) => (
                   <>
                     <div className="flex w-full items-center justify-between">
-                     <img src={item.image} alt="coin-logo" className="h-7 w-7" />
+                     <Image src={item.image} alt="coin-logo" className="h-7 w-7" width={28} height={28} />
                       <div className="flex items-center">
                         <div className="text-sm">
                           <RadioGroup.Label
