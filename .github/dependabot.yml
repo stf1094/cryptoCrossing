@@ -16,10 +16,12 @@ updates:
           - "minor"
           - "patch"
     ignore:
-      # reduxjs-toolkit-persist@7 peer-requires @reduxjs/toolkit v1, so the v2
-      # major cannot be installed until we migrate off that persist library.
-      # Block the major update; minor/patch bumps of RTK still flow through.
-      - dependency-name: "@reduxjs/toolkit"
+      # Portfolio project: skip ALL major-version bumps to keep the repo quiet.
+      # The grouped minor/patch PR above and any security fixes still come
+      # through; do majors manually if/when you choose. (This also covers the
+      # @reduxjs/toolkit v2 conflict with reduxjs-toolkit-persist@7's RTK v1
+      # peer requirement.)
+      - dependency-name: "*"
         update-types: ["version-update:semver-major"]
 
   # keep the GitHub Actions used in CI up to date, grouped together
