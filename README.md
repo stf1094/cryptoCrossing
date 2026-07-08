@@ -4,7 +4,7 @@ A cryptocurrency portfolio tracker built with Next.js and Firebase. Users can tr
 
 ![Crypto Crossing — track your portfolio, live markets, and news in one place](docs/screenshot.png)
 
-> _Live demo: https://your-deploy-url.example_
+> _Live demo: https://crypto-crossing-7hai.vercel.app
 
 ## Features
 
