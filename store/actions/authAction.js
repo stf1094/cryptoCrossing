@@ -9,7 +9,7 @@ import {
     setPersistence, browserLocalPersistence,
     signInAnonymously
   } from 'firebase/auth';
-import { collection, doc, getDocs, addDoc, setDoc, Timestamp, updateDoc } from 'firebase/firestore';
+import { collection, doc, getDocs, addDoc, setDoc, Timestamp, updateDoc, deleteDoc } from 'firebase/firestore';
 import { toast } from 'react-toastify';
 
 // Register User from tutorial
@@ -48,17 +48,35 @@ import { toast } from 'react-toastify';
     }
 }
 
-//Delete account -- prob need to add deleting portfolio too...
-export const deleteAccount = () => dispatch => {
-    db.collection('profiles').doc(auth.currentUser.uid).delete()
-    .then(() => {
-         auth.currentUser.delete();
-         dispatch({type: "clearPortfolio"});
-         dispatch({type: "clearProfile"});
-         dispatch({type: "logout"});
-    }).catch(err => {
+//Delete account -- removes the user's coins, profile doc, and auth user
+export const deleteAccount = () => async dispatch => {
+    const user = auth.currentUser;
+    if (!user) return;
+    try {
+        // delete every coin in the user's subcollection first
+        const coinsColl = collection(db, 'profiles', user.uid, 'coins');
+        const snapshot = await getDocs(coinsColl);
+        await Promise.all(
+            snapshot.docs.map((coinDoc) =>
+                deleteDoc(doc(db, 'profiles', user.uid, 'coins', coinDoc.id))
+            )
+        );
+        // then the profile document
+        await deleteDoc(doc(db, 'profiles', user.uid));
+        // finally the auth user (requires a recent login)
+        await deleteUser(user);
+        dispatch({type: "clearPortfolio"});
+        dispatch({type: "clearProfile"});
+        dispatch({type: "logoutSuccess"});
+        toast.success("Your account has been deleted.");
+    } catch(err) {
         console.error(err.message);
-    })
+        if (err.code === "auth/requires-recent-login") {
+            toast.error("Please log in again before deleting your account.");
+        } else {
+            toast.error("Could not delete your account. Please try again...");
+        }
+    }
 }
 
 //set user
@@ -155,8 +173,8 @@ export const logout = () => async dispatch => {
 
    //Update User Password -- If user is already logged in
    export const updateUserPassword = (newPassword, cred) => dispatch => {
-     if (newPassword.length < 6) {
-         Alert.alert('Password must be 6 or more characters');
+     if (newPassword.length < 7) {
+         toast.warning("Passwords must be at least 7 characters.");
      } else {
        return reauthenticateWithCredential(auth.currentUser, cred)
          .then(() => {
