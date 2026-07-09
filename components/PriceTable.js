@@ -1,27 +1,28 @@
 "use client";
-import React, { useEffect } from 'react';
+import React, { useMemo, useState } from 'react';
 import PriceItem from './PriceItem';
-import { useState } from 'react';
 import { ArrowLongDownIcon, ArrowLongUpIcon } from '@heroicons/react/24/solid';
 
 function PriceTable(props) {
-  const [tableData, setTableData] = useState(props.coins);
   const [sortField, setSortField] = useState("market_cap");
   const [sortOrder, setSortOrder] = useState("asc");
   const data = props.coins;
 
-  // Update tableData when props.coins changes (e.g., switching pages)
-  useEffect(() => {
-    setTableData(props.coins);
-  }, [props.coins]);
-   
+  // Derive the sorted view during render from props + sort state, so it
+  // always tracks props.coins (e.g. switching pages) without an effect.
+  const tableData = useMemo(() => {
+    if (!data || sortField === "market_cap") return data;
+    const dir = sortOrder === "asc" ? 1 : -1;
+    return [...data].sort((a, b) => (a[sortField] > b[sortField] ? dir : -dir));
+  }, [data, sortField, sortOrder]);
+
    const handleSort = (field) => {
-      const newdata = [...data].sort((a, b) => 
-      // a[field].
-        a[field] > b[field] ? 1 * (sortOrder === "asc" ? 1 : -1) : -1 * (sortOrder === "asc" ? 1 : -1));
+      if (sortField === field) {
+        setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+      } else {
         setSortField(field);
-        setSortOrder((sortOrder === "asc" ? "desc" : "asc"));
-        setTableData(newdata);
+        setSortOrder("asc");
+      }
   }
 
     return (

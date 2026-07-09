@@ -1,5 +1,5 @@
 "use client";
-import { Fragment, useState, useEffect } from 'react';
+import { Fragment, useState, useMemo } from 'react';
 import Image from 'next/image';
 import { Dialog, Transition, RadioGroup } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
@@ -13,27 +13,28 @@ export default function AddCoinSlideover({showAddCoinSlide, setShowAddCoinSlide,
     const [searchName, setSearchName] = useState('');
     const [selected, setSelected] = useState(null);
     const [coinIndex, setIndex] = useState(0);
-    const [coins, setCoins] = useState(coinsList);
     const dispatch = useDispatch();
-    
-    useEffect(() => {
-      if (coinsList && coinsList.length > 0) {
-        setCoins(coinsList);
-      }
-    }, [coinsList]);
+
+    // Derive the visible list from the search term rather than mirroring
+    // coinsList into state and filtering it in place.
+    const coins = useMemo(() => {
+      if (!coinsList) return coinsList;
+      if (searchName === '') return coinsList;
+      return coinsList.filter((coin) =>
+        coin.name.toLowerCase().startsWith(searchName.toLowerCase())
+      );
+    }, [coinsList, searchName]);
 
     const closeAddCoinSlide = (event) => {
         setInputValue('');
         setSearchName('');
-        setCoins(coinsList);
         setSelected(null);
         setShowAddCoinSlide(false);
     };
-  
+
     const clearSelection = () => {
       setSelected(null);
       setSearchName('');
-      setCoins(coinsList);
     }
 
   const handleChange = (event) => setInputValue(event.target.value);
@@ -42,20 +43,7 @@ export default function AddCoinSlideover({showAddCoinSlide, setShowAddCoinSlide,
         setSelected(id);
         setIndex(index);
   }
-  const filter = (e) => {
-    const keyword = e.target.value;
-    if (keyword !== '') {
-      const results = coins.filter((coin) => {
-        return coin.name.toLowerCase().startsWith(keyword.toLowerCase());
-        // Use the toLowerCase() method to make it case-insensitive
-      });
-      setCoins(results);
-    } else {
-      setCoins(coinsList);
-      // If the text field is empty, show all users
-    }
-    setSearchName(keyword);
-  }
+  const filter = (e) => setSearchName(e.target.value);
 
   const handleClick = () => {
      if (inputValue === '' || inputValue === null || inputValue === 0) {
@@ -76,7 +64,6 @@ export default function AddCoinSlideover({showAddCoinSlide, setShowAddCoinSlide,
        setInputValue('');
        setShowAddCoinSlide(false);
        setSearchName('');
-       setCoins(coinsList);
      }
   }
 

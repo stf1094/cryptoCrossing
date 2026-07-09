@@ -1,7 +1,6 @@
 import React, {useRef, useState, Suspense} from 'react';
 import Image from 'next/image';
-import { useSelector, useDispatch } from 'react-redux';
-import { deleteACoin } from '../store/actions/portfolioAction';
+import { useSelector } from 'react-redux';
 import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline';
 import DeleteCoinModal from './DeleteCoinModal';
 import PercentageBar from './PercentageBar';
@@ -16,7 +15,6 @@ function Results({setModalAmount, setModalCoin, setModalCoinId, openUpdateModal,
   const [coinToDeleteId, setCoinToDeleteId] = useState('');
   const [coinToDeleteName, setCoinToDeleteName] = useState('');
   const [coinToDeleteAmount, setCoinToDeleteAmount] = useState('');
-  const dispatch = useDispatch();
   const portfolioLoading = !portfolio && !market && !total;
   const inputAmount = useRef();
   let newPortfolio = [];
@@ -39,9 +37,6 @@ function Results({setModalAmount, setModalCoin, setModalCoinId, openUpdateModal,
      setModalCoin(name);
      setModalCoinId(id);
      openUpdateModal();
-  }
-  const handleRemove = (id) => {
-    dispatch(deleteACoin(id))
   }
   /* if (portfolioLoading) {
     return <LoadingState />;
