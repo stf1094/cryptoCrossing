@@ -1,9 +1,28 @@
 "use client";
 import Image from 'next/image';
 import Link from 'next/link';
+import useSWR from 'swr';
 import { useSelector } from 'react-redux';
 
-// Prices come from the (persisted) market slice populated by getMarket().
+// The rail only needs the top handful of coins. Prefer the (persisted) market
+// slice if it's already populated; otherwise make one lightweight top-8 request
+// so we never trigger the heavier 2-page getMarket() and its rate-limit-prone
+// page-2 fetch.
+const TOP_COINS_URL =
+  'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=8&page=1&sparkline=false&price_change_percentage=24h';
+
+const fetcher = (url) => fetch(url).then((res) => res.json());
+
+// Normalise both the mapped market-slice shape and the raw CoinGecko shape.
+const toRow = (c) => ({
+  id: c.id,
+  name: c.name,
+  image: c.image,
+  rank: c.rank ?? c.market_cap_rank,
+  price: c.price ?? c.current_price,
+  change: c.change ?? c.price_change_percentage_24h_in_currency ?? c.price_change_percentage_24h ?? 0,
+});
+
 const formatPrice = (price) => {
   if (typeof price !== 'number') return '—';
   const maximumFractionDigits = price >= 1 ? 2 : 6;
@@ -12,7 +31,11 @@ const formatPrice = (price) => {
 
 function MarketRail() {
   const { market } = useSelector((state) => state.market);
-  const coins = market ? market.slice(0, 8) : [];
+  // Only fetch when the market slice isn't already available.
+  const { data } = useSWR(market ? null : TOP_COINS_URL, fetcher);
+
+  const source = market ?? (Array.isArray(data) ? data : null);
+  const coins = source ? source.slice(0, 8).map(toRow) : [];
 
   return (
     <aside className="lg:sticky lg:top-6">

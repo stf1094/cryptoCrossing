@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from "next/navigation";
 import { Tab } from '@headlessui/react';
 import { fetchAllNews } from '@/store/actions/newsAction';
-import { getMarket } from '@/store/actions/portfolioAction';
 import NewsMagazine from '../../components/NewsMagazine';
 import MarketRail from '../../components/MarketRail';
 
@@ -39,7 +38,6 @@ function News() {
   const dispatch = useDispatch();
   const { isAuthenticated, loading: authLoading } = useSelector((state) => state.auth);
   const { btcNews, altsNews, news, loading } = useSelector((state) => state.news);
-  const { market } = useSelector((state) => state.market);
 
   // Handle authentication redirect
   useEffect(() => {
@@ -52,11 +50,6 @@ function News() {
   useEffect(() => {
     dispatch(fetchAllNews());
   }, [dispatch]);
-
-  // Populate the price rail if the (persisted) market slice is empty
-  useEffect(() => {
-    if (!market) dispatch(getMarket());
-  }, [market, dispatch]);
 
   const isLoading = loading || (!btcNews && !altsNews && !news);
   const panels = [btcNews, news, altsNews];
