@@ -1,5 +1,8 @@
+// Auth actions — everything touching Firebase Authentication and the user's
+// profile document: register, login (email + anonymous), logout, account
+// deletion, and email/password/reset flows. setUser is the bridge that syncs
+// Firebase's auth state into the `auth` slice.
 import {auth, db} from '../../firebaseConfig';
-import {setAlert} from './alertAction';
 import {
     signInWithEmailAndPassword, signOut,
     onAuthStateChanged, createUserWithEmailAndPassword,
@@ -12,7 +15,9 @@ import {
 import { collection, doc, getDocs, addDoc, setDoc, Timestamp, updateDoc, deleteDoc } from 'firebase/firestore';
 import { toast } from 'react-toastify';
 
-// Register User from tutorial
+// register — creates a new email/password account, seeds a matching profile doc
+// (uid, email, total: 0) in Firestore, then loads the user into the store.
+// Enforces a 7-char minimum password and surfaces friendly toasts on failure.
  export const register = (email, password) => async dispatch => {
     if (password.length < 7) {
         toast.warning("Passwords must be at least 7 characters.")
@@ -79,7 +84,9 @@ export const deleteAccount = () => async dispatch => {
     }
 }
 
-//set user
+// setUser — subscribes to Firebase's auth state and mirrors it into the store:
+// dispatches loadUserSuccess (and sets local persistence) when a user is present,
+// loadUserFail otherwise. Called after every successful login/register.
 export const setUser = () => dispatch => {
     try {
         dispatch({type: "loadUserRequest"});
@@ -97,6 +104,8 @@ export const setUser = () => dispatch => {
     }
 }
 
+// login — signs in an existing user with email/password and loads them into the
+// store, mapping common Firebase auth errors to readable toasts.
 export const login = (email, password) => async dispatch => {
     try {
         await signInWithEmailAndPassword(auth, email, password)
@@ -126,6 +135,8 @@ export const login = (email, password) => async dispatch => {
         }
 }
 
+// loginAnon — signs the user in as an anonymous guest (no email/password) so
+// they can try the app, then loads that guest user into the store.
  export const loginAnon = () => dispatch => {
      signInAnonymously(auth)
      .then((userCredential) => {

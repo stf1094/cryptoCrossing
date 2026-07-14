@@ -1,7 +1,7 @@
 "use client";
 import React, {useEffect, useState} from 'react';
 import PriceTable from '../../components/PriceTable';
-import { getHotColdCoins, getMarket } from '@/store/actions/portfolioAction';
+import { getHotColdCoins, getMarket } from '@/store/actions/marketAction';
 import { useDispatch, useSelector } from 'react-redux';
 import { ArrowTrendingUpIcon } from '@heroicons/react/24/solid';
 import TrendingSlider from '@/components/TrendingSlider';
