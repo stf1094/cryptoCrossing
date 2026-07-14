@@ -50,10 +50,33 @@ function toArticle(item, source) {
   };
 }
 
+// Cap each category so a single busy feed can't flood a bucket.
+const PER_CATEGORY = 25;
+
 // RSS feeds have no category metadata, so bucket articles by keyword match
 // against the title and snippet.
 const BTC_RE = /\b(bitcoin|btc)\b/i;
-const ALT_RE = /\b(ethereum|eth|solana|sol|xrp|cardano|ada|altcoin|dogecoin|bnb)\b/i;
+
+// Roughly the top 50 coins by market cap (Bitcoin handled separately, and
+// stablecoins omitted since they'd match nothing newsworthy). Each coin is
+// matched by its distinctive name and/or ticker. Short tickers that are also
+// common English words (ton, apt, op, vet, sand, atom, dot, near, flow, ...)
+// are intentionally left to their full name only, to avoid false positives.
+const ALT_TERMS = [
+  'altcoin', 'ethereum', 'eth', 'xrp', 'ripple', 'binance coin', 'bnb',
+  'solana', 'sol', 'dogecoin', 'doge', 'cardano', 'ada', 'tron', 'trx',
+  'avalanche', 'avax', 'chainlink', 'shiba inu', 'shib', 'polkadot',
+  'bitcoin cash', 'bch', 'near protocol', 'litecoin', 'ltc', 'polygon',
+  'matic', 'uniswap', 'internet computer', 'aptos', 'stellar', 'xlm',
+  'ethereum classic', 'cronos', 'render', 'rndr', 'hedera', 'hbar',
+  'filecoin', 'arbitrum', 'cosmos', 'vechain', 'optimism', 'maker', 'mkr',
+  'injective', 'immutable', 'the graph', 'sui', 'aave', 'algorand', 'algo',
+  'fantom', 'theta', 'tezos', 'xtz', 'quant', 'kaspa', 'bittensor',
+  'toncoin', 'mantle', 'pepe', 'bonk', 'worldcoin', 'axie infinity',
+  'the sandbox', 'decentraland',
+];
+const ALT_RE = new RegExp(`\\b(${ALT_TERMS.join('|')})\\b`, 'i');
+
 const matches = (a, re) => re.test(`${a.title} ${a.text}`);
 
 const stripDate = ({ date, ...rest }) => rest;
@@ -78,9 +101,9 @@ export async function GET() {
     }
 
     return NextResponse.json({
-      news: articles.map(stripDate),
-      btcNews: articles.filter((a) => matches(a, BTC_RE)).map(stripDate),
-      altsNews: articles.filter((a) => matches(a, ALT_RE)).map(stripDate),
+      news: articles.slice(0, PER_CATEGORY).map(stripDate),
+      btcNews: articles.filter((a) => matches(a, BTC_RE)).slice(0, PER_CATEGORY).map(stripDate),
+      altsNews: articles.filter((a) => matches(a, ALT_RE)).slice(0, PER_CATEGORY).map(stripDate),
     });
   } catch (err) {
     return NextResponse.json(
