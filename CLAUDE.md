@@ -18,6 +18,23 @@ npm start
 npm run lint
 ```
 
+## Git Workflow
+
+**Every change, refactor, or new feature must go through a branch and a pull request — never commit directly to `main`.**
+
+1. Before making any edit, create a branch off `main`:
+   `git checkout -b <type>/<short-description>` (types: `feat/`, `fix/`, `refactor/`, `style/`, `chore/`).
+2. Make the change and commit it on that branch.
+3. Push and open a PR: `git push -u origin <branch>` then `gh pr create --fill --base main`.
+4. Merge via the PR, not by pushing to `main`.
+
+This is enforced, not just advisory: the PreToolUse hook in
+[.claude/settings.json](.claude/settings.json) runs
+[.claude/hooks/block-edits-on-main.sh](.claude/hooks/block-edits-on-main.sh),
+which **denies `Edit`/`Write`/`MultiEdit`/`NotebookEdit` whenever the current
+branch is `main` or `master`**. If an edit is blocked, create a feature branch
+first, then retry.
+
 ## Project Overview
 
 This is a cryptocurrency portfolio tracking application built with Next.js 14 (App Router), React 18, Redux Toolkit, and Firebase. Users can track their crypto holdings, view market data, and read crypto news. The app supports both authenticated users and anonymous guests.
