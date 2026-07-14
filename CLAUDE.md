@@ -57,12 +57,15 @@ profiles/{userId}
   - uid, email, total
   - coins (subcollection)
     - {coinId}: coinId, name, amount, currentPrice, value
-
-news
-  - general/generalNews/{newsId}
-  - bitcoin/bitcoinNews/{newsId}
-  - alts/altsNews/{newsId}
 ```
+
+**News:** No longer stored in Firestore. News is fetched on demand from
+CryptoCompare via the server-side route handler [app/api/news/route.js](app/api/news/route.js),
+which caches the upstream response for 15 minutes (`revalidate = 900`) and splits
+articles into general / bitcoin / alts by CryptoCompare's `categories` tags.
+`fetchAllNews()` in [store/actions/newsAction.js](store/actions/newsAction.js) hits
+`/api/news` once and dispatches the existing three success actions. Set an optional
+`CRYPTOCOMPARE_API_KEY` (server-side, non-public) in `.env.local`.
 
 ### Data Flow
 

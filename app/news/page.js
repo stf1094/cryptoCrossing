@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import NewsList from '../../components/NewsList';
 import BtcNewsList from '../../components/BtcNewsList';
 import AltsNewsList from '../../components/AltsNewsList';
-import { fetchBitcoinNews, fetchAltsNews, fetchNews } from '@/store/actions/newsAction';
+import { fetchAllNews } from '@/store/actions/newsAction';
 import { Tab } from '@headlessui/react';
 
 function News() {
@@ -27,9 +27,7 @@ function News() {
 
   // Fetch all news data once on mount
   useEffect(() => {
-    dispatch(fetchNews());
-    dispatch(fetchBitcoinNews());
-    dispatch(fetchAltsNews());
+    dispatch(fetchAllNews());
   }, [dispatch]);
 
   // Determine if we're still loading any news data
