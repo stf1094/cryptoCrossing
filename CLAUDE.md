@@ -59,13 +59,14 @@ profiles/{userId}
     - {coinId}: coinId, name, amount, currentPrice, value
 ```
 
-**News:** No longer stored in Firestore. News is fetched on demand from
-CryptoCompare via the server-side route handler [app/api/news/route.js](app/api/news/route.js),
-which caches the upstream response for 15 minutes (`revalidate = 900`) and splits
-articles into general / bitcoin / alts by CryptoCompare's `categories` tags.
+**News:** No longer stored in Firestore. News is fetched on demand from public
+RSS feeds (CoinDesk, Cointelegraph, Decrypt) via the server-side route handler
+[app/api/news/route.js](app/api/news/route.js), which caches the upstream response
+for 15 minutes (`revalidate = 900`), sorts by date, and buckets articles into
+general / bitcoin / alts by keyword match (RSS has no category metadata).
 `fetchAllNews()` in [store/actions/newsAction.js](store/actions/newsAction.js) hits
-`/api/news` once and dispatches the existing three success actions. Set an optional
-`CRYPTOCOMPARE_API_KEY` (server-side, non-public) in `.env.local`.
+`/api/news` once and dispatches the existing three success actions. No API key or
+env var required.
 
 ### Data Flow
 
