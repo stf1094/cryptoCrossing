@@ -268,11 +268,20 @@ img {
 
 .news-image-container {
   cursor: pointer;
+  flex-shrink: 0;
+  width: 100%;
+  max-width: 320px;
 }
 
+/* Width and height scale together (via aspect-ratio) so next/image's
+   aspect-ratio check stays happy on every viewport. object-fit crops the
+   varied RSS thumbnails to a uniform 16:9 box without distortion. */
 .news-image {
-  height: 180px;
-  width: 320px;
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
 }
 
 .news-content {
