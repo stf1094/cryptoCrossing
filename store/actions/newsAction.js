@@ -1,5 +1,5 @@
 // News is served by our own cached route handler (app/api/news/route.js),
-// which pulls from CryptoCompare's free API. One request returns all three
+// which pulls from RSS. One request returns all three
 // categories, so we fetch once and fan the result out to the existing
 // general / bitcoin / alts reducer actions.
 export const fetchAllNews = () => async (dispatch) => {
