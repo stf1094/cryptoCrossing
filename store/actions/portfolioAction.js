@@ -2,6 +2,14 @@ import { db, auth } from "../../firebaseConfig";
 import { collection, getDocs, updateDoc, setDoc, addDoc, doc, deleteDoc, query, orderBy } from 'firebase/firestore';
 import { toast } from 'react-toastify';
 
+// Portfolio actions — CRUD over the signed-in user's coin holdings, stored as a
+// `coins` subcollection under profiles/{uid} in Firestore, plus the running
+// portfolio total. All of these require an authenticated user. Market-data
+// fetching lives in marketAction.js.
+
+// addACoin — adds a coin to the portfolio. If the user already holds that coin
+// its amount is summed onto the existing doc and the value recomputed; otherwise
+// a new coin doc is created. Refreshes the portfolio from Firestore on success.
 export const addACoin = (coin, portfolio) => async dispatch => {
     let currentCoinsArray = [];
     let match = false;
@@ -46,7 +54,8 @@ export const addACoin = (coin, portfolio) => async dispatch => {
    }
 };
 
-//delete a coin
+// deleteACoin — removes a single coin doc from the user's holdings by id and
+// refreshes the portfolio. amount/name are used only for the toast message.
 export const deleteACoin = (id, amount, name) => dispatch => {
     const coinDoc = doc(db, "profiles", auth.currentUser.uid, 'coins', id);
     deleteDoc(coinDoc)
@@ -61,7 +70,9 @@ export const deleteACoin = (id, amount, name) => dispatch => {
     });
 }
 
-// fetch portfolio
+// fetchPortfolio — loads all of the user's coins (ordered by value desc) into
+// the store, then sums them into the portfolio total via updateTotal2. Pass
+// setLoading truthy to flip the loading flag first; skips entirely without a uid.
 export const fetchPortfolio = (userId, setLoading) => dispatch => {
     if (!userId) {
         console.warn('fetchPortfolio called without a userId; skipping.');
@@ -85,7 +96,10 @@ export const fetchPortfolio = (userId, setLoading) => dispatch => {
         })
     }
 
-//updateTotal
+// updateTotal — LEGACY / UNUSED. Reduces the portfolio to a total via a caller
+// supplied callback. Not referenced anywhere in the app and references an
+// undefined `UPDATE_TOTAL_SUCCESS` constant, so it would throw if ever called.
+// Kept only for reference; safe to delete. updateTotal2 is the live version.
 export const updateTotal = (portfolio, callback) => dispatch => {
       let finaltotal;
       portfolio.forEach(function(coin) {
@@ -94,6 +108,10 @@ export const updateTotal = (portfolio, callback) => dispatch => {
      dispatch({type: UPDATE_TOTAL_SUCCESS, payload: finaltotal})
 }
 
+// updateTotal2 — persists the freshly computed portfolio total onto the user's
+// profile doc (upserted with merge so first-time/anonymous users get a profile
+// created rather than an error) and mirrors it into the store. Called by
+// fetchPortfolio after loading holdings.
 export const updateTotal2 = (newTotal) => async dispatch => {
   try {
     const { uid, email } = auth.currentUser;
@@ -107,6 +125,10 @@ export const updateTotal2 = (newTotal) => async dispatch => {
   }
 }
 
+// updatePrices — refreshes stored prices/values for every coin the user holds.
+// `options` is a list of live market coins (id + current_price); each holding is
+// matched by coinId and its currentPrice/value written back to Firestore, then
+// the portfolio is re-fetched. Used to keep holdings in sync with the market.
  export const updatePrices = (options, uid) => dispatch => {
   const coinsColl = collection(db, 'profiles', uid, 'coins');
   getDocs(coinsColl)
@@ -128,6 +150,9 @@ export const updateTotal2 = (newTotal) => async dispatch => {
   })
 }
 
+// updatePortfolioItem — overwrites a single holding's amount (and recomputes its
+// value from the given price) directly, e.g. from the edit-coin modal. Unlike
+// addACoin this replaces the amount rather than adding to it.
 export const updatePortfolioItem = (newAmount, id, name, currentPrice) => async dispatch => {
     try {
        const coinDoc = doc(db, "profiles", auth.currentUser.uid, 'coins', id);
@@ -140,121 +165,4 @@ export const updatePortfolioItem = (newAmount, id, name, currentPrice) => async 
         dispatch({type: "updateCoinFail"});
         toast.error(`Could not update ${name}. Please try again.`);
     }
-}
-
-export const updateMarketPage = (page) => async dispatch => {
-    await dispatch({type: "updateMarketPage", payload: page});
-}
-
-export const getMarket = () => async dispatch => {
-    let market = [];
-    let market2 = [];
-    const config = {
-        headers: {
-            'Access-Control-Allow-Origin': 'https://api.coingecko.com/api/v3',
-        }
-      }
-      try {
-        const res = await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=1&sparkline=false&price_change_percentage=24h%2C7d%2C30d&locale=en&precision=3`)
-        .then((res) => res.json())
-        .then((data) => {
-            data.forEach((item) => {
-                market.push({
-                    id: item.id,
-                    name: item.name,
-                    image: item.image,
-                    rank: item.market_cap_rank,
-                    price: item.current_price,
-                    change7: item.price_change_percentage_7d_in_currency ? Number(item.price_change_percentage_7d_in_currency) : 0.000,
-                    change30: item.price_change_percentage_30d_in_currency ? Number(item.price_change_percentage_30d_in_currency) : 0.000,
-                    change: item.price_change_percentage_24h_in_currency ? item.price_change_percentage_24h_in_currency : 0.000
-                })
-            })
-        });
-        await dispatch({type: "getMarketSuccess", payload: market});
-    } catch (err) {
-        console.error(err.message);
-    }
-
-    // Add delay to avoid rate limiting
-    await new Promise(resolve => setTimeout(resolve, 1000));
-
-    try {
-        const res = await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=2&sparkline=false&price_change_percentage=24h%2C7d%2C30d&locale=en&precision=3`)
-        const responseData = await res.json();
-
-        if (responseData?.status?.error_message) {
-          console.error('CoinGecko API Error (Page 2):', responseData.status.error_message);
-        }
-
-        if (Array.isArray(responseData)) {
-          responseData.forEach((item) => {
-              market2.push({
-                  id: item.id,
-                  name: item.name,
-                  image: item.image,
-                  rank: item.market_cap_rank,
-                  price: item.current_price,
-                  change7: item.price_change_percentage_7d_in_currency ? Number(item.price_change_percentage_7d_in_currency) : 0.000,
-                  change30: item.price_change_percentage_30d_in_currency ? Number(item.price_change_percentage_30d_in_currency) : 0.000,
-                  change: item.price_change_percentage_24h_in_currency ? item.price_change_percentage_24h_in_currency : 0.000
-              })
-          })
-        }
-
-        await dispatch({type: "getMarket2Success", payload: market2});
-    } catch (err) {
-        console.error('Error fetching page 2:', err?.message || err);
-        dispatch({type: "getMarket2Fail", payload: err?.message || 'Unknown error'});
-    }
-
-}
-
-export const getHotColdCoins = (page) => async dispatch => {
-    const hot7 = [];
-    const cold7 = [];
-    const hot30 = [];
-    const cold30 = [];
-    const config = {
-        headers: {
-            'Access-Control-Allow-Origin': 'https://api.coingecko.com/api/v3',
-        }
-      }
-    const res = fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=${page}&sparkline=false&price_change_percentage=24h%2C7d%2C30d&locale=en&precision=2`)
-    .then((res) => res.json())
-    .then((data) => {
-        data.forEach((item) => {
-            //hot
-            if (item.price_change_percentage_7d_in_currency > 20) {
-                hot7.push(item);
-            }
-            if (item.price_change_percentage_30d_in_currency > 35) {
-                hot30.push(item);
-            }
-            //cold
-            if (item.price_change_percentage_7d_in_currency < -15) {
-                cold7.push(item);
-            }
-            if (item.price_change_percentage_30d_in_currency < -30) {
-                cold30.push(item);
-            }
-        })
-    }).then(() => {
-        // order hot and cold
-        const orderedHot7 = hot7.sort((a,b) =>
-            a.price_change_percentage_7d_in_currency > b.price_change_percentage_7d_in_currency ? -1 * 1 : 1 * 1);
-        const orderedHot30 = hot30.sort((a,b) =>
-            a.price_change_percentage_30d_in_currency > b.price_change_percentage_30d_in_currency ? -1 * 1 : 1 * 1);
-        const orderedCold7 = cold7.sort((a,b) =>
-            a.price_change_percentage_7d_in_currency > b.price_change_percentage_7d_in_currency ? -1 * 1 : 1 * 1);
-        const orderedCold30 = cold30.sort((a,b) =>
-            a.price_change_percentage_30d_in_currency > b.price_change_percentage_30d_in_currency ? -1 * 1 : 1 * 1);
-        // push hot and cold to reducer, action, etc...
-        dispatch({type: "fetchHotCoinsSuccess", payload: {orderedHot7, orderedHot30}});
-        dispatch({type: "fetchColdCoinsSuccess", payload: {orderedCold7, orderedCold30}});
-    }).catch((error) => {
-        console.error(error.message);
-        dispatch({type: "fetchHotCoinsFail", payload: error.message});
-        dispatch({type: "fetchColdCoinsFail", payload: error.message});
-    })
 }
